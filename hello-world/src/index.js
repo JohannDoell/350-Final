@@ -1,3 +1,7 @@
+// To run use: "npm start"
+// If "npm start" does not work (the server doesn't start because you're missing modules)
+// use "npm install"
+
 // ==== Import Statements ====
 
 import React from 'react';
@@ -20,57 +24,27 @@ class SendButton extends React.Component {
     }
 }
 
-class CreateButton extends React.Component {
-    render() {
-        return (
-            <button className="createbutton" onClick={this.props.onClick}>
-                Create Room
-            </button>
-        );
-    }
-}
-
-class LoginButton extends React.Component {
-    render() {
-        return (
-            <button className="loginbutton" onClick={this.props.onClick}>
-                Login
-            </button>
-        );
-    }
-}
-
-class RoomButton extends React.Component {
-    render() {
-        return (
-            <button className="roombutton" onClick={this.props.onClick}>
-                {this.props.text}
-            </button>
-        );
-    }
-}
-
-class ShowRoomsButton extends React.Component {
-    render() {
-        return (
-            <button className="showroomsbutton" onClick={this.props.onClick}>
-                {this.props.text}
-            </button>
-        );
-    }
-}
-
-class Chatbox extends React.Component {
+class Main extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            // Old, just to show an example.
             showchat: true,
             message: '',
-            chatlog: []
-        };
-        this.handleMessageChange = this.handleMessageChange.bind(this);
+            chatlog: [],
 
-        this.handleSendKeyPress = this.handleSendKeyPress.bind(this);
+            // New
+            response: 'Not connected to server.'
+
+        };
+        // Bind functions here
+        // EX:
+        //this.handleMessageChange = this.handleMessageChange.bind(this);
+
+        this.getTest = this.getTest.bind(this);
+
+
+        this.getTest();
     }
 
     // == Lifecycle ==
@@ -88,30 +62,6 @@ class Chatbox extends React.Component {
         );
     }
 
-    renderRoomButtons() {
-        // https://blog.cloudboost.io/for-loops-in-react-render-no-you-didnt-6c9f4aa73778
-
-        let buttons = [];
-
-        for (let i = 0; i < this.state.rooms.length; i++) {
-            buttons.push(<RoomButton
-                text={this.state.rooms[i]}
-                onClick={() => this.roomClick(i)}
-                index={i}
-            />);
-        }
-        return buttons;
-    }
-
-    renderShowRoomButton(_text) {
-        return (
-            <ShowRoomsButton
-                onClick={() => this.showRoomsClick()}
-                text={_text}
-            />
-        );
-    }
-
     // == Handle ==
 
     sendClick() {
@@ -119,24 +69,14 @@ class Chatbox extends React.Component {
         this.setState({ message: '' });
     }
 
-    handleSendKeyPress(event) {
-        if (event.key === "Enter") {
-            this.sendMessage(this.state.message);
-            this.setState({ message: '' });
-        }
-    }
-
-    handleMessageChange(event) {
-        this.setState({ message: event.target.value });
-    }
-
     // == Functionality ==
 
     initUser() {
-        username = this.state.username;
+        //username = this.state.username;
 
-        console.log(username);
+        //console.log(username);
 
+        /*
         if (username === "") {
             alert("Username cannot be empty");
         } else {
@@ -146,6 +86,7 @@ class Chatbox extends React.Component {
             setInterval(this.getRooms, timeBetweenNextChatlogCheck);
             this.forceUpdate();
         }
+        */
     }
 
     // == Rest API ==
@@ -158,7 +99,8 @@ class Chatbox extends React.Component {
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify({
-                "username": username,
+                //"username": username,
+                "username": "George",
             })
         }).done(function (data) {
             console.log(data);
@@ -171,22 +113,25 @@ class Chatbox extends React.Component {
 
     // = GET =
 
-    getChatlog() {
-        fetch("http://localhost:5000/chatroom/chatlog/" + username + "/")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    console.log(result);
-                    this.setState({ chatlog: result });
-                }
-            )
+    getTest() {
+      fetch("http://localhost:5000/get_test/")
+        .then(res => res.json())
+        .then(
+          (result) => {
+            console.log(result);
+            this.setState({ response: result});
+          }
+        )
     }
 
     // == Render Self ==
 
     render() {
                 return (
+                  <div>
                     <p>Hello World</p>
+                    <p>{this.state.response}</p>
+                  </div>
                 );
     }
 }
@@ -194,6 +139,6 @@ class Chatbox extends React.Component {
 // ========================================
 
 ReactDOM.render(
-    <Chatbox />,
+    <Main />,
     document.getElementById('root')
 );
