@@ -10,7 +10,7 @@ import $ from 'jquery';
 import './index.css';
 
 // ==== Global Variables ====
-
+//hello
 
 // ==== Classes ====
 
@@ -73,7 +73,7 @@ class Main extends React.Component {
 
     initUser() {
         //username = this.state.username;
-
+bind(this)
         //console.log(username);
 
         /*
@@ -91,7 +91,7 @@ class Main extends React.Component {
 
     // == Rest API ==
 
-    // = POST =
+    // = POST =bind(this)
 
     registerUser() {
         $.ajax({
