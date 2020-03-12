@@ -1,0 +1,14 @@
+== CREATION QUERIES ==
+
+CREATE TABLE IF NOT EXISTS Users (
+    userID INTEGER PRIMARY KEY,
+    username TEXT NOT NULL,
+    password TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Replies (
+    replyID INTEGER PRIMARY KEY,
+    threadID INTEGER NOT NULL,
+    
+    FOREIGN KEY (threadID) REFERENCES Threads(threadID)
+);
