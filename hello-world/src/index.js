@@ -73,7 +73,6 @@ class Main extends React.Component {
 
     initUser() {
         //username = this.state.username;
-bind(this)
         //console.log(username);
 
         /*
