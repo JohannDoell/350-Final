@@ -26,14 +26,22 @@ CREATE TABLE IF NOT EXISTS Replies (
 
 CREATE TABLE IF NOT EXISTS Threads (
     threadID INTEGER PRIMARY KEY NOT NULL,
-    categoryID INTEGER NOT NULL,
+    boardID INTEGER NOT NULL,
+    isPinned INTEGER NOT NULL,
     title TEXT NOT NULL,
-    originalReplyID INTEGER NOT NULL,
     replies INTEGER NOT NULL,
     views INTEGER NOT NULL,
     
-    FOREIGN KEY (categoryID) REFERENCES Categories(categoryID),
+    FOREIGN KEY (boardID) REFERENCES Boards(boardID),
     FOREIGN KEY (originalReplyID) REFERENCES Replies(replyID)
+);
+
+CREATE TABLE IF NOT EXISTS Boards (
+    boardID INTEGER PRIMARY KEY,
+    boardName TEXT NOT NULL,
+    categoryID INTEGER NOT NULL,
+    
+    FOREIGN KEY (categoryID) REFERENCES Categories(categoryID)
 );
 
 CREATE TABLE IF NOT EXISTS Categories (
