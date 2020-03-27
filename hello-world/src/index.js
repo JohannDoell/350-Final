@@ -8,6 +8,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import './index.css';
+import Banner from './banner.png';
 
 // ==== Global Variables ====
 //hello
@@ -20,6 +21,53 @@ class SendButton extends React.Component {
             <button className="sendbutton" onClick={this.props.onClick}>
                 Send
             </button>
+        );
+    }
+}
+
+class BoardContainer extends React.Component {
+    render() {
+        return (
+            <div className="boardContainer">
+            <p>Board</p>
+            </div>
+        );
+    }
+}
+
+class CategoryContainer extends React.Component {
+
+    renderBoards(num) {
+        let boards = [];
+
+        for (let i = 0; i < num; i++) {
+            boards.push(
+                <BoardContainer
+
+                />
+            )
+        }
+
+        return boards;
+    }
+
+    render() {
+
+        return (
+            <div className="categoryContainer">
+            <p>Category</p>
+            {this.renderBoards(5)}
+            </div>
+        );
+    }
+}
+
+class NavBar extends React.Component {
+    render() {
+        return (
+            <div className="navBar">
+            <p>NavBar</p>
+            </div>
         );
     }
 }
@@ -62,6 +110,29 @@ class Main extends React.Component {
         );
     }
 
+    renderCategories(num) {
+
+        let categories = [];
+
+        for (let i = 0; i < num; i++) {
+            categories.push(
+                <CategoryContainer
+
+                />
+            )
+        }
+
+        return categories;
+    }
+
+    renderNavBar() {
+        return(
+            <NavBar
+            
+            />
+        );
+    }
+
     // == Handle ==
 
     sendClick() {
@@ -73,7 +144,7 @@ class Main extends React.Component {
 
     initUser() {
         //username = this.state.username;
-bind(this)
+        
         //console.log(username);
 
         /*
@@ -91,7 +162,7 @@ bind(this)
 
     // == Rest API ==
 
-    // = POST =bind(this)
+    // = POST =
 
     registerUser() {
         $.ajax({
@@ -128,9 +199,12 @@ bind(this)
 
     render() {
                 return (
-                  <div>
-                    <p>Hello World</p>
+                  <div className="mainContainer">
+                    <img className="banner" src={Banner} alt="banner"></img>
+                    {this.renderNavBar()}
+                    <p>Welcome to Generic Forum Software!</p>
                     <p>{this.state.response}</p>
+                    {this.renderCategories(3)}
                   </div>
                 );
     }
