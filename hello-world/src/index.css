@@ -1,12 +1,55 @@
+/* === HTML === */
+
 body {
   font: 14px "Century Gothic", Futura, sans-serif;
   margin: 20px;
   color: white;
-  background-color: #0e1a73;
+  background-color: #4a7dcf;
+}
+
+div {
+  text-align: center;
+  padding: 10px;
 }
 
 ol, ul {
   padding-left: 30px;
+}
+
+/* === Images === */
+
+/* .Banner {
+  background-image: url(./banner.png);
+} */
+
+/* === React Classes === */
+
+.mainContainer {
+  background-color: #2a59a3;
+  margin-left: 300px;
+  margin-right: 300px;
+}
+
+.categoryContainer {
+  background-color: burlywood;
+  margin: 10px;
+  text-align: left;
+  font: 20px;
+}
+
+.boardContainer {
+  background-color: cadetblue;
+  margin: 0px;
+}
+
+.navBar {
+  background-color: darkblue;
+  margin: 0px;
+}
+
+.banner {
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .status {
