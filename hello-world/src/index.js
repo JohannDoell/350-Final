@@ -73,7 +73,7 @@ class Main extends React.Component {
 
     initUser() {
         //username = this.state.username;
-bind(this)
+        
         //console.log(username);
 
         /*
@@ -91,7 +91,7 @@ bind(this)
 
     // == Rest API ==
 
-    // = POST =bind(this)
+    // = POST =
 
     registerUser() {
         $.ajax({
