@@ -4,14 +4,19 @@
 
 // ==== Import Statements ====
 
+
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import './index.css';
 import Banner from './banner.png';
 
+// === React Import ===
+
+import NavBar from './header.js';
+
 // ==== Global Variables ====
-//hello
 
 // ==== Classes ====
 
@@ -57,16 +62,6 @@ class CategoryContainer extends React.Component {
             <div className="categoryContainer">
             <p>Category</p>
             {this.renderBoards(5)}
-            </div>
-        );
-    }
-}
-
-class NavBar extends React.Component {
-    render() {
-        return (
-            <div className="navBar">
-            <p>NavBar</p>
             </div>
         );
     }
