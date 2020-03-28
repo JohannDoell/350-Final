@@ -1,14 +1,21 @@
 // ==== Import Statements ====
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import './index.css';
-import Banner from './banner.png';
+import bannerImage from './banner.png';
 
 // ==== Global Variables ====
 
 // ==== Classes ====
+
+class Banner extends React.Component {
+    render() {
+        return (
+            <img className="banner" src={bannerImage} alt="banner"></img>
+        );
+    }
+}
 
 class NavBar extends React.Component {
     render() {
@@ -20,6 +27,17 @@ class NavBar extends React.Component {
     }
 }
 
+class Header extends React.Component {
+    render() {
+        return (
+            <div className="header">
+            <Banner/>
+            <NavBar/>
+            </div>
+        );
+    }
+}
+
 // === React Export ===
 
-export default NavBar;
+export default Header;
