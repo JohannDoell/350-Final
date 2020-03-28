@@ -4,73 +4,21 @@
 
 // ==== Import Statements ====
 
+
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import './index.css';
-import Banner from './banner.png';
+
+// === React Import ===
+
+import Header from './header.js';
+import CategoryContainer from './containers.js';
 
 // ==== Global Variables ====
-//hello
 
 // ==== Classes ====
-
-class SendButton extends React.Component {
-    render() {
-        return (
-            <button className="sendbutton" onClick={this.props.onClick}>
-                Send
-            </button>
-        );
-    }
-}
-
-class BoardContainer extends React.Component {
-    render() {
-        return (
-            <div className="boardContainer">
-            <p>Board</p>
-            </div>
-        );
-    }
-}
-
-class CategoryContainer extends React.Component {
-
-    renderBoards(num) {
-        let boards = [];
-
-        for (let i = 0; i < num; i++) {
-            boards.push(
-                <BoardContainer
-
-                />
-            )
-        }
-
-        return boards;
-    }
-
-    render() {
-
-        return (
-            <div className="categoryContainer">
-            <p>Category</p>
-            {this.renderBoards(5)}
-            </div>
-        );
-    }
-}
-
-class NavBar extends React.Component {
-    render() {
-        return (
-            <div className="navBar">
-            <p>NavBar</p>
-            </div>
-        );
-    }
-}
 
 class Main extends React.Component {
     constructor(props) {
@@ -102,14 +50,6 @@ class Main extends React.Component {
 
     // == Rendering ==
 
-    renderSendButton() {
-        return (
-            <SendButton
-                onClick={() => this.sendClick()}
-            />
-        );
-    }
-
     renderCategories(num) {
 
         let categories = [];
@@ -117,7 +57,7 @@ class Main extends React.Component {
         for (let i = 0; i < num; i++) {
             categories.push(
                 <CategoryContainer
-
+                    boardNum={3}
                 />
             )
         }
@@ -125,9 +65,18 @@ class Main extends React.Component {
         return categories;
     }
 
-    renderNavBar() {
+    renderWelcomeMessage() {
         return(
-            <NavBar
+            <div className="welcome">
+            <p>Welcome to Generic Forum Software!</p>
+            <p>{this.state.response}</p>
+            </div>
+        );
+    }
+
+    renderHeader() {
+        return(
+            <Header
             
             />
         );
@@ -136,28 +85,13 @@ class Main extends React.Component {
     // == Handle ==
 
     sendClick() {
-        this.sendMessage(this.state.message);
         this.setState({ message: '' });
     }
 
     // == Functionality ==
 
     initUser() {
-        //username = this.state.username;
-        
-        //console.log(username);
 
-        /*
-        if (username === "") {
-            alert("Username cannot be empty");
-        } else {
-            this.registerUser();
-            connected = true;
-            setInterval(this.getChatlog, timeBetweenNextChatlogCheck);
-            setInterval(this.getRooms, timeBetweenNextChatlogCheck);
-            this.forceUpdate();
-        }
-        */
     }
 
     // == Rest API ==
@@ -178,10 +112,6 @@ class Main extends React.Component {
         });
     }
 
-    sendMessage(message) {
-
-    }
-
     // = GET =
 
     getTest() {
@@ -200,10 +130,8 @@ class Main extends React.Component {
     render() {
                 return (
                   <div className="mainContainer">
-                    <img className="banner" src={Banner} alt="banner"></img>
-                    {this.renderNavBar()}
-                    <p>Welcome to Generic Forum Software!</p>
-                    <p>{this.state.response}</p>
+                    {this.renderHeader()}
+                    {this.renderWelcomeMessage()}
                     {this.renderCategories(3)}
                   </div>
                 );
