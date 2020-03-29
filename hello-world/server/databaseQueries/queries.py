@@ -1,6 +1,7 @@
-import dbConnection as dbConnection
+import dbConnection
 from datetime import datetime
 import json as json
+import passwordHash
 
 
 def insertThread(conn, threadJson):
@@ -11,7 +12,8 @@ def insertThread(conn, threadJson):
     :return: none
     """
     threadDict = json.loads(threadJson)
-    thread = (threadDict["boardID"], threadDict["isPinned"], threadDict["title"], threadDict["replies"], threadDict["views"])
+    thread = (
+    threadDict["boardID"], threadDict["isPinned"], threadDict["title"], threadDict["replies"], threadDict["views"])
     sql = '''   INSERT INTO Threads(boardID, isPinned, title, replies, views)
                 VALUES(?,?,?,?,?) '''
     cur = conn.cursor()
@@ -27,7 +29,7 @@ def getThreadsFromBoardAsJsons(conn, boardID):
     """
     conn.row_factory = dbConnection.sq.Row
     cur = conn.cursor()
-    cur.execute("SELECT * FROM Threads WHERE boardID=?", (boardID, ))
+    cur.execute("SELECT * FROM Threads WHERE boardID=?", (boardID,))
 
     rows = [dict(row) for row in cur.fetchall()]  # list of tuples
 
@@ -36,7 +38,7 @@ def getThreadsFromBoardAsJsons(conn, boardID):
     return jsonRows
 
 
-def insertBoard(conn,boardJson):
+def insertBoard(conn, boardJson):
     """
     insert a board into the database
     :param conn: connection to the db
@@ -60,7 +62,7 @@ def getBoardsFromCategoryAsJsons(conn, catID):
     """
     conn.row_factory = dbConnection.sq.Row
     cur = conn.cursor()
-    cur.execute("SELECT * FROM Boards WHERE categoryID=?", (catID, ))
+    cur.execute("SELECT * FROM Boards WHERE categoryID=?", (catID,))
 
     rows = [dict(row) for row in cur.fetchall()]  # list of tuples
 
@@ -69,7 +71,7 @@ def getBoardsFromCategoryAsJsons(conn, catID):
     return jsonRows
 
 
-def insertCategory(conn,categoryJson):
+def insertCategory(conn, categoryJson):
     """
     insert a category into the database
     :param conn: connection to the db
@@ -81,7 +83,7 @@ def insertCategory(conn,categoryJson):
     sql = '''   INSERT INTO Categories(categoryName)
                 VALUES(?) '''
     cur = conn.cursor()
-    cur.execute(sql, (category, ))
+    cur.execute(sql, (category,))
 
 
 def getCategoriesAsJsons(conn):
@@ -98,6 +100,7 @@ def getCategoriesAsJsons(conn):
 
     jsonRows = [json.dumps(row) for row in rows]
     return jsonRows
+
 
 def insertReply(conn, replyJson):
     replyDict = json.loads(replyJson)
@@ -119,12 +122,13 @@ def getRepliesFromThreadAsJsons(conn, threadID):
     """
     conn.row_factory = dbConnection.sq.Row
     cur = conn.cursor()
-    cur.execute("SELECT * FROM Replies WHERE threadID=?", (threadID, ))
+    cur.execute("SELECT * FROM Replies WHERE threadID=?", (threadID,))
 
     rows = [dict(row) for row in cur.fetchall()]  # list of tuples
 
     jsonRows = [json.dumps(row) for row in rows]
     return jsonRows
+
 
 def getUserAsJson(conn, userID):
     """
@@ -135,13 +139,12 @@ def getUserAsJson(conn, userID):
     """
     conn.row_factory = dbConnection.sq.Row
     cur = conn.cursor()
-    cur.execute("SELECT * FROM Users WHERE userID=?", (userID, ))
+    cur.execute("SELECT * FROM Users WHERE userID=?", (userID,))
 
     row = dict(cur.fetchone())
 
-    row = json.dumps(row)
-
     return json.dumps(row)
+
 
 def insertUser(conn, userJson):
     """
@@ -151,13 +154,14 @@ def insertUser(conn, userJson):
     :return: none
     """
     userDict = json.loads(userJson)
-    userDict["password"] = 0  # hashed password
+    userDict["password"] = passwordHash.hashPassword(userDict["password"])
     user = (userDict["username"], userDict["password"])
     cur = conn.cursor()
     sql = '''   INSERT INTO Users(username,password)
                 VALUES (?,?)'''
 
     cur.execute(sql, user)
+
 
 if __name__ == "__main__":
     conn = dbConnection.create_connection()
@@ -179,7 +183,8 @@ if __name__ == "__main__":
 
     # replies tests
     print("replies tests")
-    insertReply(conn, '{"threadID": 1, "userID": 1, "body": "test reply", "dateCreated": "2020-03-27 22:17:56", "dateEdited": "2020-03-27 22:17:56"}')
+    insertReply(conn,
+                '{"threadID": 1, "userID": 1, "body": "test reply", "dateCreated": "2020-03-27 22:17:56", "dateEdited": "2020-03-27 22:17:56"}')
     print(getRepliesFromThreadAsJsons(conn, 1))
 
     # users test
