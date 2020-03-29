@@ -4,8 +4,6 @@
 
 // ==== Import Statements ====
 
-
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
@@ -14,11 +12,16 @@ import './index.css';
 // === React Import ===
 
 import Header from './header.js';
-import CategoryContainer from './containers.js';
+import {CategoryContainer, ThreadsContainer, Thread} from './containers.js';
+
+// === Images ===
 
 // ==== Global Variables ====
 
 // ==== Classes ====
+
+
+
 
 class Main extends React.Component {
     constructor(props) {
@@ -65,19 +68,18 @@ class Main extends React.Component {
         return categories;
     }
 
-    renderWelcomeMessage() {
-        return(
-            <div className="welcome">
-            <p>Welcome to Generic Forum Software!</p>
-            <p>{this.state.response}</p>
-            </div>
-        );
+    renderThreadInfo() {
+        return <ThreadsContainer></ThreadsContainer>
+    }
+
+    renderThread() {
+        return <Thread></Thread>
     }
 
     renderHeader() {
-        return(
+        return (
             <Header
-            
+                serverMessage={this.state.response}
             />
         );
     }
@@ -115,26 +117,27 @@ class Main extends React.Component {
     // = GET =
 
     getTest() {
-      fetch("http://localhost:5000/get_test/")
-        .then(res => res.json())
-        .then(
-          (result) => {
-            console.log(result);
-            this.setState({ response: result});
-          }
-        )
+        fetch("http://localhost:5000/get_test/")
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log(result);
+                    this.setState({ response: result });
+                }
+            )
     }
 
     // == Render Self ==
 
     render() {
-                return (
-                  <div className="mainContainer">
-                    {this.renderHeader()}
-                    {this.renderWelcomeMessage()}
-                    {this.renderCategories(3)}
-                  </div>
-                );
+        return (
+            <div className="mainContainer">
+                {this.renderHeader()}
+                {this.renderCategories(1)}
+                {this.renderThreadInfo()}
+                {this.renderThread()}
+            </div>
+        );
     }
 }
 
