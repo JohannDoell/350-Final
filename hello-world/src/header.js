@@ -3,7 +3,10 @@
 import React from 'react';
 import $ from 'jquery';
 import './index.css';
-import bannerImage from './banner.png';
+
+// === Images ===
+
+import bannerImage from './images/banner.png';
 
 // ==== Global Variables ====
 
@@ -21,7 +24,12 @@ class NavBar extends React.Component {
     render() {
         return (
             <div className="navBar">
-            <p>NavBar</p>
+            <button className="navBarButton" onClick={this.props.onClick}>
+                Test1
+            </button>
+            <button className="navBarButton" onClick={this.props.onClick}>
+                Test2
+            </button>
             </div>
         );
     }
@@ -32,6 +40,8 @@ class Header extends React.Component {
         return (
             <div className="header">
             <Banner/>
+            <p>Welcome user!</p>
+            <p>{this.props.serverMessage}</p>
             <NavBar/>
             </div>
         );
