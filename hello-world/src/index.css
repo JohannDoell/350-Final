@@ -1,59 +1,240 @@
+/* === HTML === */
+
 body {
-    font: 14px "Century Gothic", Futura, sans-serif;
-    margin: 20px;
-  }
-  
-  ol, ul {
-    padding-left: 30px;
-  }
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 0px;
+  color: white;
 
-  .board-row:after {
-    clear: both;
-    content: "";
-    display: table;
-  }
-  
-  .status {
-    margin-bottom: 10px;
-  }
-  
-  .square {
-    background: #fff;
-    border: 1px solid #999;
-    float: left;
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 34px;
-    height: 34px;
-    margin-right: -1px;
-    margin-top: -1px;
-    padding: 0;
-    text-align: center;
-    width: 34px;
-  }
-  
-  .square:focus {
-    outline: none;
-  }
-  
-  .kbd-navigation .square:focus {
-    background: #ddd;
-  }
-  
-  .game {
-    display: flex;
-    flex-direction: row;
-  }
-  
-  .game-info {
-    margin-left: 20px;
-  }
+  background-image: url("./images/background.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
 
-  .chat-log {
-    width: 300px;
-    height: 500px;
-    line-height: 1em;
-    overflow: scroll;
-    padding: 5px;
-  }
+  /*
+  background-color: #4a7dcf; 
+  */
+}
+
+div {
+  text-align: center;
+  padding: 0px;
+}
+
+ol, ul {
+  padding-left: 30px;
+}
+
+/* === Images === */
+
+/* .Banner {
+  background-image: url(./banner.png);
+} */
+
+/* === React Classes === */
+
+.mainContainer {
+  background-color: #2a59a3;
+  height: 100%;
+  margin-left: 300px;
+  margin-right: 300px;
+}
+
+/* Category */
+
+.categoryContainer {
+  background-color: #004466;
+  margin: 10px;
+  padding-top: 4px;
+  text-align: left;
   
+  font: 20px;
+}
+
+.categoryText {
+  text-align: left;
+  padding-left: 10px;
+  font-weight: bold;
+}
+
+/* Board */
+
+.boardContainer {
+  background-color: #E5E5E5;
+  color: black;
+  vertical-align: middle;
+  margin: 0px;
+  padding: 0px;
+  padding-left: 10px;
+  display: flex;
+}
+
+.boardGeneralInfo {
+  padding-left: 2%;
+  text-align: left;
+}
+
+.boardTitle {
+  font-weight: bold;
+  text-align: left;
+}
+
+.boardInfoText {
+  text-align: left;
+  font-style: italic;
+}
+
+.boardStats {
+  padding-left: 75%;
+}
+
+.boardLastPost {
+  padding-left: 5%;
+}
+
+/* Threads */
+
+.threadsContainer {
+  background-color: #004466;
+  margin: 10px;
+  padding-top: 4px;
+  text-align: left;
+  
+  font: 20px;
+}
+
+.threadsContainerInfo {
+  text-align: left;
+  padding-left: 10px;
+  font-weight: bold;
+}
+
+/* Thread Info */
+
+.threadInfoContainer {
+  background-color: #E5E5E5;
+  color: black;
+  vertical-align: middle;
+  margin: 0px;
+  padding: 0px;
+  padding-left: 10px;
+  display: flex;
+}
+
+.threadGeneralInfo {
+  padding-left: 2%;
+  text-align: left;
+}
+
+.threadInfoTitle {
+  font-weight: bold;
+  text-align: left;
+}
+
+.threadInfoText {
+  text-align: left;
+  font-style: italic;
+}
+
+.threadStats {
+  padding-left: 74%;
+}
+
+.threadLastPost {
+  padding-left: 5%;
+}
+
+/* Thread */
+
+.threadContainer {
+  background-color: #004466;
+  margin: 10px;
+  padding-top: 4px;
+  text-align: left;
+  
+  font: 20px;
+}
+
+.threadTitle {
+  text-align: left;
+  padding-left: 10px;
+  font-weight: bold;
+}
+
+/* Reply */
+
+.reply {
+  background-color: #E5E5E5;
+  color: black;
+  vertical-align: middle;
+  margin: 0px;
+  margin-bottom: 1px;
+  padding: 0px;
+  padding-left: 10px;
+  display: flex;
+}
+
+.replyUser {
+  background-color: rgb(170, 154, 154);
+  text-align: left;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-weight: bold;
+}
+
+.replyText {
+  padding-left: 5%;
+}
+
+/* Navbar */
+
+.navBar {
+  background-color: #004466;
+  margin: 0px;
+  padding: 0px;
+  padding-left: 20px;
+  display: flex;
+}
+
+.navBarButton {
+  background-color: #004466;
+  border: none;
+  color: white;
+  margin: 0px;
+  padding: 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.navBarButton:hover {
+  background-color: #025a86;
+  cursor: pointer;
+}
+
+/* Images */
+
+.banner {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.boardIcon {
+  max-width: 25px;
+  max-height: 25px;
+  align-content: center;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.status {
+  margin-bottom: 10px;
+}
+
+.chat-log {
+  width: 300px;
+  height: 500px;
+  line-height: 1em;
+  overflow: scroll;
+  padding: 5px;
+}

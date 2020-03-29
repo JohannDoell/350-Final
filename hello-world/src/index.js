@@ -9,20 +9,19 @@ import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import './index.css';
 
+// === React Import ===
+
+import Header from './header.js';
+import {CategoryContainer, ThreadsContainer, Thread} from './containers.js';
+
+// === Images ===
+
 // ==== Global Variables ====
-//hello
 
 // ==== Classes ====
 
-class SendButton extends React.Component {
-    render() {
-        return (
-            <button className="sendbutton" onClick={this.props.onClick}>
-                Send
-            </button>
-        );
-    }
-}
+
+
 
 class Main extends React.Component {
     constructor(props) {
@@ -54,10 +53,33 @@ class Main extends React.Component {
 
     // == Rendering ==
 
-    renderSendButton() {
+    renderCategories(num) {
+
+        let categories = [];
+
+        for (let i = 0; i < num; i++) {
+            categories.push(
+                <CategoryContainer
+                    boardNum={3}
+                />
+            )
+        }
+
+        return categories;
+    }
+
+    renderThreadInfo() {
+        return <ThreadsContainer></ThreadsContainer>
+    }
+
+    renderThread() {
+        return <Thread></Thread>
+    }
+
+    renderHeader() {
         return (
-            <SendButton
-                onClick={() => this.sendClick()}
+            <Header
+                serverMessage={this.state.response}
             />
         );
     }
@@ -65,32 +87,18 @@ class Main extends React.Component {
     // == Handle ==
 
     sendClick() {
-        this.sendMessage(this.state.message);
         this.setState({ message: '' });
     }
 
     // == Functionality ==
 
     initUser() {
-        //username = this.state.username;
-        //console.log(username);
 
-        /*
-        if (username === "") {
-            alert("Username cannot be empty");
-        } else {
-            this.registerUser();
-            connected = true;
-            setInterval(this.getChatlog, timeBetweenNextChatlogCheck);
-            setInterval(this.getRooms, timeBetweenNextChatlogCheck);
-            this.forceUpdate();
-        }
-        */
     }
 
     // == Rest API ==
 
-    // = POST =bind(this)
+    // = POST =
 
     registerUser() {
         $.ajax({
@@ -106,32 +114,30 @@ class Main extends React.Component {
         });
     }
 
-    sendMessage(message) {
-
-    }
-
     // = GET =
 
     getTest() {
-      fetch("http://localhost:5000/get_test/")
-        .then(res => res.json())
-        .then(
-          (result) => {
-            console.log(result);
-            this.setState({ response: result});
-          }
-        )
+        fetch("http://localhost:5000/get_test/")
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log(result);
+                    this.setState({ response: result });
+                }
+            )
     }
 
     // == Render Self ==
 
     render() {
-                return (
-                  <div>
-                    <p>Hello World</p>
-                    <p>{this.state.response}</p>
-                  </div>
-                );
+        return (
+            <div className="mainContainer">
+                {this.renderHeader()}
+                {this.renderCategories(1)}
+                {this.renderThreadInfo()}
+                {this.renderThread()}
+            </div>
+        );
     }
 }
 
