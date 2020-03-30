@@ -232,6 +232,36 @@ class Reply extends React.Component {
     }
 }
 
+class Input extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: ''
+        };
+
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(event) {
+        this.setState({value: event.target.value});
+    }
+
+    render() {
+        return (
+            <div>
+                <div className="inputContainer">
+                    <p>Reply</p>
+                    <label>
+                        <textarea className="inputBox" value={this.state.value} onChange={this.handleChange}></textarea>
+                    </label>
+                    <input type="submit" value="Submit"/>
+                </div>
+            </div>
+        );
+    }
+}
+
 // === React Export ===
 
-export {CategoryContainer, ThreadsContainer, Thread}
+export {CategoryContainer, ThreadsContainer, Thread, Input}

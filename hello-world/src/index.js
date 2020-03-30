@@ -12,7 +12,7 @@ import './index.css';
 // === React Import ===
 
 import Header from './header.js';
-import {CategoryContainer, ThreadsContainer, Thread} from './containers.js';
+import { CategoryContainer, ThreadsContainer, Thread, Input } from './containers.js';
 
 // === Images ===
 
@@ -20,8 +20,15 @@ import {CategoryContainer, ThreadsContainer, Thread} from './containers.js';
 
 // ==== Classes ====
 
-
-
+class Credits extends React.Component {
+    render() {
+        return (
+            <div className="credits">
+                <p>CMPT 350 - Winter 2019-2020</p>
+            </div>
+        );
+    }
+}
 
 class Main extends React.Component {
     constructor(props) {
@@ -136,6 +143,8 @@ class Main extends React.Component {
                 {this.renderCategories(1)}
                 {this.renderThreadInfo()}
                 {this.renderThread()}
+                <Input></Input>
+                <Credits></Credits>
             </div>
         );
     }
