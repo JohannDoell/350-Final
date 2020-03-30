@@ -4,6 +4,7 @@ import React from 'react';
 import $ from 'jquery';
 import './index.css';
 
+
 import blankSquare from './images/blanksquare.png';
 
 // ==== Global Variables ====
@@ -11,18 +12,34 @@ import blankSquare from './images/blanksquare.png';
 // ==== Classes ====
 
 class CategoryContainer extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+        boards: [],
+        };
+    }
+    componentDidMount() {
+        fetch('http://localhost:5000/get/boards')
+          .then(response => response.json())
+          .then((data) => {
+            this.setState({ boards : data })
+            console.log(this.state)
+          })
+    }
 
     renderBoards(num) {
         let boards = [];
 
-        for (let i = 0; i < num; i++) {
-            boards.push(
-                <BoardContainer
-
-                />
-            )
+        if (this.state.boards.length != 0){
+            for (let i = 0; i < num; i++) {
+                boards.push(
+                    <BoardContainer
+                        boardTitle = {this.state.boards[i]["boardName"]}
+                    />
+                )
+            }
         }
-
         return boards;
     }
 
@@ -32,19 +49,21 @@ class CategoryContainer extends React.Component {
                 <div className="categoryText">
                     <p>Category</p>
                 </div>
-            {this.renderBoards(this.props.boardNum)}
+            {this.renderBoards(1)}
             </div>
         );
     }
 }
 
+
 class BoardContainer extends React.Component {
     render() {
+
         return (
             <div className="boardContainer">
                 <div className="boardGeneralInfo">
                     <div className="boardTitle">
-                        <p>Board</p>
+                        <p>{this.props.boardTitle}</p>
                     </div>
                     <div className="boardInfoText">
                         <p>Info Text</p>
@@ -62,17 +81,37 @@ class BoardContainer extends React.Component {
     }
 }
 
-class ThreadsContainer extends React.Component {
+
+class ThreadsContainer extends React.Component { //board
+    constructor(props) {
+        super(props);
+
+        this.state = {
+        threads: [],
+        };
+    }
+    componentDidMount() {
+        fetch('http://localhost:5000/get/threads')
+          .then(response => response.json())
+          .then((data) => {
+            this.setState({ threads : data })
+            console.log(this.state)
+          })
+    }
 
     renderThreads(num) {
         let threads = [];
 
         for (let i = 0; i < num; i++) {
-            threads.push(
+            if (this.state.threads.length != 0){
+                threads.push(
                 <ThreadInfoContainer
-
+                threadInfoTitle = {this.state.threads[i]["title"]}
+                numOfReplies = {this.state.threads[i]['replies']}
+                numOfViews = {this.state.threads[i]["views"]}
                 />
-            )
+                )
+            }
         }
 
         return threads;
@@ -85,13 +124,14 @@ class ThreadsContainer extends React.Component {
                 <div className="threadsContainerInfo">
                     <p>Threads</p>
                 </div>
-                {this.renderThreads(3)}
+                {this.renderThreads(this.state.threads.length)}
 
             </div>
 
         );
     }
 }
+
 
 class ThreadInfoContainer extends React.Component {
     render() {
@@ -100,7 +140,7 @@ class ThreadInfoContainer extends React.Component {
                 <div className="threadGeneralInfo">
 
                     <div className="threadInfoTitle">
-                        <p>Thread</p>
+                        <p>{this.props.threadInfoTitle}</p>
                     </div>
 
                     <div className="threadInfoText">
@@ -110,7 +150,8 @@ class ThreadInfoContainer extends React.Component {
                 </div>
 
                 <div className="threadStats">
-                    <p>Stats</p>
+                    <p>Replies: {this.props.numOfReplies}</p>
+                    <p>Views: {this.props.numOfViews}</p>
                 </div>
                 <div className="threadLastPost">
                     <p>Last Post</p>
@@ -121,17 +162,38 @@ class ThreadInfoContainer extends React.Component {
     }
 }
 
+
 class Thread extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+        replies: [],
+        };
+    }
+    componentDidMount() {
+        fetch('http://localhost:5000/get/replies')
+          .then(response => response.json())
+          .then((data) => {
+            this.setState({ replies : data })
+          })
+    }
 
     renderReplies(num) {
         let replies = [];
 
         for (let i = 0; i < num; i++) {
-            replies.push(
-                <Reply
+            if (this.state.replies.length != 0){
+                replies.push(
 
-                />
-            )
+                   <Reply
+                    replyText = {this.state.replies[i]['body']}
+                    replyUser = {this.state.replies[i]['username']}
+                   />
+
+                )
+            }
         }
 
         return replies;
@@ -143,23 +205,27 @@ class Thread extends React.Component {
                 <div className="threadTitle">
                     <p>Thread Title</p>
                 </div>
-
-                {this.renderReplies(3)}
+                {this.renderReplies(this.state.replies.length)}
             </div>
 
         );
     }
 }
 
+
 class Reply extends React.Component {
+  constructor(props) {
+    super(props);
+
+  }
     render() {
         return (
             <div className="reply">
                 <div className="replyUser">
-                    <p>User</p>
+                    <p>Author: {this.props.replyUser}</p>
                 </div>
                 <div className="replyText">
-                    <p>Reply</p>
+                    <p>{this.props.replyText}</p>
                 </div>
             </div>
         );
