@@ -180,10 +180,10 @@ class Thread extends React.Component {
           })
     }
 
-    renderReplies(num) {
+    renderReplies() {
         let replies = [];
 
-        for (let i = 0; i < num; i++) {
+        for (let i = 0; i < this.state.replies.length; i++) {
             if (this.state.replies.length != 0){
                 replies.push(
 
@@ -205,7 +205,7 @@ class Thread extends React.Component {
                 <div className="threadTitle">
                     <p>Thread Title</p>
                 </div>
-                {this.renderReplies(this.state.replies.length)}
+                {this.renderReplies()}
             </div>
         );
     }
