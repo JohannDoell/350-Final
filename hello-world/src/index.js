@@ -196,7 +196,7 @@ class Main extends React.Component {
     // = GET =
 
     getTest() {
-        fetch("http://localhost:5000/get_test/")
+        fetch("http://localhost:5000/")
             .then(res => res.json())
             .then(
                 (result) => {

@@ -1,5 +1,4 @@
 import dbConnection
-from datetime import datetime
 import json as json
 import passwordHash
 
@@ -31,9 +30,9 @@ def getThreadsFromBoardAsJsons(conn, boardID):
     cur = conn.cursor()
     cur.execute("SELECT * FROM Threads WHERE boardID=?", (boardID,))
 
-    rows = [dict(row) for row in cur.fetchall()]  # list of tuples
+    rows = [dict(row) for row in cur.fetchall()]
 
-    jsonRows = [json.dumps(row) for row in rows]
+    jsonRows = json.dumps([row for row in rows])
 
     return jsonRows
 
@@ -64,9 +63,9 @@ def getBoardsFromCategoryAsJsons(conn, catID):
     cur = conn.cursor()
     cur.execute("SELECT * FROM Boards WHERE categoryID=?", (catID,))
 
-    rows = [dict(row) for row in cur.fetchall()]  # list of tuples
+    rows = [dict(row) for row in cur.fetchall()]
 
-    jsonRows = [json.dumps(row) for row in rows]
+    jsonRows = json.dumps([row for row in rows])
 
     return jsonRows
 
@@ -96,9 +95,9 @@ def getCategoriesAsJsons(conn):
     cur = conn.cursor()
     cur.execute("SELECT * FROM Categories")
 
-    rows = [dict(row) for row in cur.fetchall()]  # list of tuples
+    rows = [dict(row) for row in cur.fetchall()]
 
-    jsonRows = [json.dumps(row) for row in rows]
+    jsonRows = json.dumps([row for row in rows])
     return jsonRows
 
 
@@ -113,6 +112,16 @@ def insertReply(conn, replyJson):
     cur.execute(sql, reply)
 
 
+def getUserAsDict(conn, userID):
+    conn.row_factory = dbConnection.sq.Row
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM Users WHERE userID=?", (userID,))
+
+    row = dict(cur.fetchone())
+
+    return row
+
+
 def getRepliesFromThreadAsJsons(conn, threadID):
     """
     get all the replies of a certain thread
@@ -124,9 +133,13 @@ def getRepliesFromThreadAsJsons(conn, threadID):
     cur = conn.cursor()
     cur.execute("SELECT * FROM Replies WHERE threadID=?", (threadID,))
 
-    rows = [dict(row) for row in cur.fetchall()]  # list of tuples
+    rows = [dict(row) for row in cur.fetchall()]
 
-    jsonRows = [json.dumps(row) for row in rows]
+    for row in rows:
+        row['username'] = getUserAsDict(conn, row['userID'])["username"]
+        print(row)
+
+    jsonRows = json.dumps([row for row in rows])
     return jsonRows
 
 
