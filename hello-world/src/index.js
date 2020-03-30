@@ -11,8 +11,8 @@ import './index.css';
 
 // === React Import ===
 
-import Header from './header.js';
-import {CategoryContainer, ThreadsContainer, Thread} from './containers.js';
+import {Header, Credits} from './header.js';
+import { CategoryContainer, ThreadsContainer, Thread, Input } from './containers.js';
 
 // === Images ===
 
@@ -132,6 +132,8 @@ class Main extends React.Component {
                 {this.renderCategories(1)}
                 {this.renderThreadInfo()}
                 {this.renderThread()}
+                <Input></Input>
+                <Credits></Credits>
             </div>
         );
     }

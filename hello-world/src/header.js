@@ -47,6 +47,17 @@ class Header extends React.Component {
     }
 }
 
+class Credits extends React.Component {
+    render() {
+        return (
+            <div className="credits">
+                <p>CMPT 350 - Winter 2019-2020</p>
+            </div>
+        );
+    }
+}
+
 // === React Export ===
 
 export default Header;
+export {Header, Credits}
