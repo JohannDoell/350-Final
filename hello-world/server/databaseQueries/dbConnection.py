@@ -7,7 +7,7 @@ def create_connection():
     """ create a database connection to a SQLite database """
     conn = None
     try:
-        conn = sq.connect(os.path.abspath("../../db/forum.db"))  # dot directory notation
+        conn = sq.connect(os.path.abspath("D:/Documents/GitHub/350-Final/hello-world/db/forum.db"), check_same_thread=False)
         print(sq.version)
     except Error as e:
         print(e)
