@@ -70,6 +70,10 @@ ol, ul {
 
 .boardGeneralInfo {
   padding-left: 2%;
+  padding-right: 48%;
+  width: 200px;
+  max-width: 200px;
+  min-width: 200px;
   text-align: left;
 }
 
@@ -84,11 +88,18 @@ ol, ul {
 }
 
 .boardStats {
-  padding-left: 75%;
+  width: 150px;
+  max-width: 150px;
+  min-width: 150px;
+  text-align: center;
 }
 
 .boardLastPost {
   padding-left: 5%;
+  width: 150px;
+  max-width: 150px;
+  min-width: 150px;
+  text-align: left;
 }
 
 /* Threads */
@@ -122,7 +133,11 @@ ol, ul {
 
 .threadGeneralInfo {
   padding-left: 2%;
+  padding-right: 50%;
   text-align: left;
+  width: 200px;
+  max-width: 200px;
+  min-width: 200px;
 }
 
 .threadInfoTitle {
@@ -136,11 +151,17 @@ ol, ul {
 }
 
 .threadStats {
-  padding-left: 74%;
+  padding-left: 0%;
+  width: 150px;
+  max-width: 150px;
+  min-width: 150px;
 }
 
 .threadLastPost {
-  padding-left: 5%;
+  padding-right: 5%;
+  width: 150px;
+  max-width: 150px;
+  min-width: 150px;
 }
 
 /* Thread */
@@ -178,11 +199,15 @@ ol, ul {
   text-align: left;
   padding-left: 20px;
   padding-right: 20px;
+  width:100px;
+  max-width:100px;
+  min-width: 100px;
   font-weight: bold;
 }
 
 .replyText {
-  padding-left: 5%;
+  padding-left: 2%;
+  text-align: left;
 }
 
 /* Navbar */

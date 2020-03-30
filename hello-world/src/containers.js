@@ -4,7 +4,6 @@ import React from 'react';
 import $ from 'jquery';
 import './index.css';
 
-
 import blankSquare from './images/blanksquare.png';
 
 // ==== Global Variables ====
@@ -28,11 +27,11 @@ class CategoryContainer extends React.Component {
           })
     }
 
-    renderBoards(num) {
+    renderBoards() {
         let boards = [];
 
         if (this.state.boards.length != 0){
-            for (let i = 0; i < num; i++) {
+            for (let i = 0; i < this.state.boards.length; i++) {
                 boards.push(
                     <BoardContainer
                         boardTitle = {this.state.boards[i]["boardName"]}
@@ -49,7 +48,7 @@ class CategoryContainer extends React.Component {
                 <div className="categoryText">
                     <p>Category</p>
                 </div>
-            {this.renderBoards(1)}
+            {this.renderBoards()}
             </div>
         );
     }
@@ -61,6 +60,7 @@ class BoardContainer extends React.Component {
 
         return (
             <div className="boardContainer">
+
                 <div className="boardGeneralInfo">
                     <div className="boardTitle">
                         <p>{this.props.boardTitle}</p>
@@ -99,10 +99,10 @@ class ThreadsContainer extends React.Component { //board
           })
     }
 
-    renderThreads(num) {
+    renderThreads() {
         let threads = [];
 
-        for (let i = 0; i < num; i++) {
+        for (let i = 0; i < this.state.threads.length; i++) {
             if (this.state.threads.length != 0){
                 threads.push(
                 <ThreadInfoContainer
@@ -124,7 +124,7 @@ class ThreadsContainer extends React.Component { //board
                 <div className="threadsContainerInfo">
                     <p>Threads</p>
                 </div>
-                {this.renderThreads(this.state.threads.length)}
+                {this.renderThreads()}
 
             </div>
 
@@ -207,7 +207,6 @@ class Thread extends React.Component {
                 </div>
                 {this.renderReplies(this.state.replies.length)}
             </div>
-
         );
     }
 }
@@ -222,7 +221,7 @@ class Reply extends React.Component {
         return (
             <div className="reply">
                 <div className="replyUser">
-                    <p>Author: {this.props.replyUser}</p>
+                    <p>{this.props.replyUser}</p>
                 </div>
                 <div className="replyText">
                     <p>{this.props.replyText}</p>

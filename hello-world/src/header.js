@@ -25,10 +25,10 @@ class NavBar extends React.Component {
         return (
             <div className="navBar">
             <button className="navBarButton" onClick={this.props.onClick}>
-                Test1
+                Home
             </button>
             <button className="navBarButton" onClick={this.props.onClick}>
-                Test2
+                Members
             </button>
             </div>
         );
@@ -41,7 +41,6 @@ class Header extends React.Component {
             <div className="header">
             <Banner/>
             <p>Welcome user!</p>
-            <p>{this.props.serverMessage}</p>
             <NavBar/>
             </div>
         );

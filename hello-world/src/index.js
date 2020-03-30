@@ -20,9 +20,6 @@ import {CategoryContainer, ThreadsContainer, Thread} from './containers.js';
 
 // ==== Classes ====
 
-
-
-
 class Main extends React.Component {
     constructor(props) {
         super(props);
@@ -79,7 +76,6 @@ class Main extends React.Component {
     renderHeader() {
         return (
             <Header
-                serverMessage={this.state.response}
             />
         );
     }
