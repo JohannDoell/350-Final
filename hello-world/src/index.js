@@ -6,13 +6,21 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+} from "react-router-dom";
+
 import $ from 'jquery';
 import './index.css';
+
 
 // === React Import ===
 
 import {Header, Credits} from './header.js';
-import { CategoryContainer, ThreadsContainer, Thread, Input } from './containers.js';
+import {HomeContainer, CategoryContainer, ThreadsContainer, Thread, Input } from './containers.js';
 
 // === Images ===
 
@@ -20,57 +28,129 @@ import { CategoryContainer, ThreadsContainer, Thread, Input } from './containers
 
 // ==== Classes ====
 
+
+///////////// Routing practice
+
+export default function App() {
+  return (
+    <Router>
+        <Switch>
+          <Route path="/boards/:id" component={Boards} />
+          <Route path="/thread/:id" component={AThread} />
+          <Route path="/" component={Home} />
+        </Switch>
+    </Router>
+  );
+}
+
+// render functions
+
+function renderCategories(num) {
+
+    let categories = [];
+
+    for (let i = 0; i < num; i++) {
+        categories.push(
+            <CategoryContainer
+                boardNum={3}
+            />
+        )
+    }
+
+    return categories;
+}
+
+
+function renderHeader() {
+    return (
+        <Header
+        />
+    );
+}
+
+// components
+class Home extends React.Component {
+
+     renderHomeContainer(props) {
+        let home = [];
+
+        home.push(
+            <HomeContainer
+                match = {this.props.match}
+            />
+        )
+        return home;
+    }
+
+    render() {
+        console.log(this.props)
+        return (
+        <div>
+            {renderHeader()}
+            {this.renderHomeContainer()}
+        </div>
+        );
+    }
+}
+
+
+class Boards extends React.Component {
+
+    renderThreadInfo() {
+        return <ThreadsContainer
+            match = {this.props.match}
+        />
+    }
+
+    render() {
+        return (
+            <div>
+                {renderHeader()}
+                {this.renderThreadInfo()}
+            </div>
+        );
+    }
+}
+
+
+class AThread extends React.Component {
+
+    renderThread() {
+        return <Thread
+        match = {this.props.match}
+        />
+    }
+    render() {
+        return (
+            <div>
+                {renderHeader()}
+                {this.renderThread()}
+            </div>
+        );
+    }
+}
+
+///////////// Routing practice
+
+
 class Main extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // Old, just to show an example.
-            showchat: true,
-            message: '',
-            chatlog: [],
-
-            // New
-            response: 'Not connected to server.'
-
+        categories: [],
         };
-        // Bind functions here
-        // EX:
-        //this.handleMessageChange = this.handleMessageChange.bind(this);
-
-        this.getTest = this.getTest.bind(this);
-
-
-        this.getTest();
     }
 
     // == Lifecycle ==
 
     componentDidMount() {
-    }
-
-    // == Rendering ==
-
-    renderCategories(num) {
-
-        let categories = [];
-
-        for (let i = 0; i < num; i++) {
-            categories.push(
-                <CategoryContainer
-                    boardNum={3}
-                />
-            )
-        }
-
-        return categories;
-    }
-
-    renderThreadInfo() {
-        return <ThreadsContainer></ThreadsContainer>
-    }
-
-    renderThread() {
-        return <Thread></Thread>
+        //const { match : {params}} = this.props;
+        fetch("http://localhost:5000/get/categories")
+          .then(response => response.json())
+          .then((data) => {
+            this.setState({ categories : data })
+            console.log(this.state)
+          })
     }
 
     renderHeader() {
@@ -110,19 +190,6 @@ class Main extends React.Component {
         });
     }
 
-    // = GET =
-
-    getTest() {
-        fetch("http://localhost:5000/")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    console.log(result);
-                    this.setState({ response: result });
-                }
-            )
-    }
-
     // == Render Self ==
 
     render() {
@@ -142,6 +209,10 @@ class Main extends React.Component {
 // ========================================
 
 ReactDOM.render(
-    <Main />,
+    <Router>
+        <App />
+    </Router>,
+    //<Main />,
+
     document.getElementById('root')
 );

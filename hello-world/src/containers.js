@@ -3,6 +3,7 @@
 import React from 'react';
 import $ from 'jquery';
 import './index.css';
+import { Link } from 'react-router-dom';
 
 import blankSquare from './images/blanksquare.png';
 
@@ -10,20 +11,64 @@ import blankSquare from './images/blanksquare.png';
 
 // ==== Classes ====
 
+class HomeContainer extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+        categories: [],
+
+        };
+    }
+
+    componentDidMount() {
+        console.log("")
+        console.log(this.props)
+        //const { match : {params}} = this.props;
+        fetch("http://localhost:5000/get/categories")
+          .then(response => response.json())
+          .then((data) => {
+            this.setState({ categories : data })
+          });
+    }
+
+    renderCategories(num) {
+        let categories = [];
+
+        if (this.state.categories.length != 0){
+            for (let i = 0; i < num; i++) {
+                categories.push(
+                    <CategoryContainer
+                        match = {this.props.match}
+                        categoryTitle = {this.state.categories[i]["categoryName"]}
+                    />
+                )
+            }
+        }
+        return categories;
+    }
+
+    render(){
+        return <div>{this.renderCategories(this.state.categories.length)}</div>;
+    }
+}
+
+
 class CategoryContainer extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
         boards: [],
+
         };
     }
     componentDidMount() {
-        fetch('http://localhost:5000/get/boards')
+        const { match : {params}} = this.props;
+        fetch(`http://localhost:5000/get/boards/1`)
           .then(response => response.json())
           .then((data) => {
             this.setState({ boards : data })
-            console.log(this.state)
           })
     }
 
@@ -33,9 +78,12 @@ class CategoryContainer extends React.Component {
         if (this.state.boards.length != 0){
             for (let i = 0; i < this.state.boards.length; i++) {
                 boards.push(
+                <Link to={`/boards/${this.state.boards[i]["boardID"]}`}>
                     <BoardContainer
+                        match = {this.props.match}
                         boardTitle = {this.state.boards[i]["boardName"]}
                     />
+                </Link>
                 )
             }
         }
@@ -46,9 +94,9 @@ class CategoryContainer extends React.Component {
         return (
             <div className="categoryContainer">
                 <div className="categoryText">
-                    <p>Category</p>
+                    <p>{this.props.categoryTitle}</p>
                 </div>
-            {this.renderBoards()}
+            {this.renderBoards(this.state.boards.length)}
             </div>
         );
     }
@@ -91,11 +139,13 @@ class ThreadsContainer extends React.Component { //board
         };
     }
     componentDidMount() {
-        fetch('http://localhost:5000/get/threads')
+        console.log("board") // prints
+        console.log(this.props)
+        const { match : {params}} = this.props;
+        fetch(`http://localhost:5000/get/threads/${params.id}`)
           .then(response => response.json())
           .then((data) => {
             this.setState({ threads : data })
-            console.log(this.state)
           })
     }
 
@@ -105,11 +155,14 @@ class ThreadsContainer extends React.Component { //board
         for (let i = 0; i < this.state.threads.length; i++) {
             if (this.state.threads.length != 0){
                 threads.push(
-                <ThreadInfoContainer
-                threadInfoTitle = {this.state.threads[i]["title"]}
-                numOfReplies = {this.state.threads[i]['replies']}
-                numOfViews = {this.state.threads[i]["views"]}
-                />
+                <Link to={`/thread/${this.state.threads[i]["threadID"]}`}>
+                    <ThreadInfoContainer
+                    match = {this.props.match}
+                    threadInfoTitle = {this.state.threads[i]["title"]}
+                    numOfReplies = {this.state.threads[i]['replies']}
+                    numOfViews = {this.state.threads[i]["views"]}
+                    />
+                </Link>
                 )
             }
         }
@@ -173,7 +226,10 @@ class Thread extends React.Component {
         };
     }
     componentDidMount() {
-        fetch('http://localhost:5000/get/replies')
+        console.log("thread") // prints
+        console.log(this.props)
+        const { match : {params}} = this.props;
+        fetch(`http://localhost:5000/get/replies/${params.id}`)
           .then(response => response.json())
           .then((data) => {
             this.setState({ replies : data })
@@ -188,6 +244,7 @@ class Thread extends React.Component {
                 replies.push(
 
                    <Reply
+                    match = {this.props.match}
                     replyText = {this.state.replies[i]['body']}
                     replyUser = {this.state.replies[i]['username']}
                    />
@@ -203,7 +260,7 @@ class Thread extends React.Component {
         return (
             <div className="threadContainer">
                 <div className="threadTitle">
-                    <p>Thread Title</p>
+                    <p>Thread: {this.props.threadInfoTitle}</p>
                 </div>
                 {this.renderReplies()}
             </div>
@@ -263,4 +320,4 @@ class Input extends React.Component {
 
 // === React Export ===
 
-export {CategoryContainer, ThreadsContainer, Thread, Input}
+export {HomeContainer, CategoryContainer, ThreadsContainer, Thread, Input}

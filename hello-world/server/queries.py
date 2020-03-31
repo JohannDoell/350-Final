@@ -137,7 +137,6 @@ def getRepliesFromThreadAsJsons(conn, threadID):
 
     for row in rows:
         row['username'] = getUserAsDict(conn, row['userID'])["username"]
-        print(row)
 
     jsonRows = json.dumps([row for row in rows])
     return jsonRows
@@ -192,7 +191,7 @@ if __name__ == "__main__":
     # category tests
     print("category tests")
     insertCategory(conn, '{"categoryName": "test category"}')
-    getCategoriesAsJsons(conn)
+    print(getCategoriesAsJsons(conn))
 
     # replies tests
     print("replies tests")
@@ -205,4 +204,6 @@ if __name__ == "__main__":
     insertUser(conn, '{"username": "tester", "password": "yuh"}')
     print(getUserAsJson(conn, 6))
 
+    conn.commit()
+    conn.close()
 # EOF

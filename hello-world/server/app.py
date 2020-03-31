@@ -35,29 +35,31 @@ def register_user():
 
 
 # == Get ==
-@app.route('/get/boards', methods=["GET"])
-def get_test():
-    boards = queries.getBoardsFromCategoryAsJsons(conn, 1)
-
-    return boards
-
 
 @app.route('/get/categories', methods=["GET"])
-def get_boards():
+def get_categories():
     categories = queries.getCategoriesAsJsons(conn)
 
     return categories
 
-@app.route('/get/threads', methods=["GET"])
-def get_threads():
-    threads = queries.getThreadsFromBoardAsJsons(conn, 1)
+
+@app.route('/get/boards/<id>', methods=["GET"])
+def get_boards(id):
+    boards = queries.getBoardsFromCategoryAsJsons(conn, id)
+
+    return boards
+
+
+@app.route('/get/threads/<id>', methods=["GET"])
+def get_threads(id):
+    threads = queries.getThreadsFromBoardAsJsons(conn, id)
 
     return threads
 
 
-@app.route('/get/replies', methods=["GET"])
-def get_replies():
-    replies = queries.getRepliesFromThreadAsJsons(conn, 1)
+@app.route('/get/replies/<id>', methods=["GET"])
+def get_replies(id):
+    replies = queries.getRepliesFromThreadAsJsons(conn, id)
     return replies
 
 
