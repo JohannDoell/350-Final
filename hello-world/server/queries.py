@@ -160,7 +160,6 @@ def getUserAsJson(conn, userID):
 
 def insertUser(conn, userJson):
     """
-
     :param conn: connection to database
     :param userJson: json with user info
     :return: none
