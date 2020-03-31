@@ -40,7 +40,7 @@ export default function App() {
               <Link to="/boards/:id">Boards</Link>
             </li>
             <li>
-              <Link to="/threads/:id">Threads</Link>
+              <Link to="/thread/:id">Threads</Link>
             </li>
           </ul>
         </nav>
@@ -48,8 +48,8 @@ export default function App() {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/boards/:categoryID" component={Boards} />
-          <Route path="/threads/:boardID" component={AThread} />
+          <Route path="/boards/:id" component={Boards} />
+          <Route path="/thread/:id" component={AThread} />
           <Route path="/" component={Home} />
         </Switch>
       </div>
@@ -61,15 +61,7 @@ export default function App() {
 
 // render functions
 
-function renderHomeContainer() {
-    let home = [];
 
-    home.push(
-        <HomeContainer
-        />
-    )
-    return home;
-}
 
 function renderCategories(num) {
 
@@ -95,45 +87,69 @@ function renderHeader() {
 }
 
 
-function renderThreadInfo() {
-    return <ThreadsContainer></ThreadsContainer>;
-}
 
-
-function renderThread() {
-    return <Thread></Thread>
-}
 
 
 // components
-function Home() {
-  return (
-    <div>
-        {renderHeader()}
-        {renderHomeContainer()}
-        //{this.props.children}
-    </div>
-    );
+class Home extends React.Component {
+
+     renderHomeContainer(props) {
+        let home = [];
+
+        home.push(
+            <HomeContainer
+                match = {this.props.match}
+            />
+        )
+        return home;
+    }
+
+    render() {
+        console.log(this.props)
+        return (
+        <div>
+            {renderHeader()}
+            {this.renderHomeContainer()}
+        </div>
+        );
+    }
 }
 
 
-function Boards() {
-    return (
-        <div>
-            {renderHeader()}
-            {renderThreadInfo()}
-        </div>
-    );
+class Boards extends React.Component {
+
+    renderThreadInfo() {
+        return <ThreadsContainer
+            match = {this.props.match}
+        />
+    }
+
+    render() {
+        return (
+            <div>
+                {renderHeader()}
+                {this.renderThreadInfo()}
+            </div>
+        );
+    }
 }
 
 
-function AThread() {
-    return (
-        <div>
-            {renderHeader()}
-            {renderThread()}
-        </div>
-    );
+class AThread extends React.Component {
+
+    renderThread() {
+        return <Thread
+        match = {this.props.match}
+        />
+    }
+    render() {
+        return (
+            <div>
+                {renderHeader()}
+                {this.renderThread()}
+            </div>
+        );
+    }
 }
 
 

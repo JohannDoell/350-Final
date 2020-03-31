@@ -43,23 +43,23 @@ def get_categories():
     return categories
 
 
-@app.route('/get/boards/<categoryID>', methods=["GET"])
-def get_boards(categoryID):
-    boards = queries.getBoardsFromCategoryAsJsons(conn, categoryID)
+@app.route('/get/boards/<id>', methods=["GET"])
+def get_boards(id):
+    boards = queries.getBoardsFromCategoryAsJsons(conn, id)
 
     return boards
 
 
-@app.route('/get/threads/<boardID>', methods=["GET"])
-def get_threads(boardID):
-    threads = queries.getThreadsFromBoardAsJsons(conn, boardID)
+@app.route('/get/threads/<id>', methods=["GET"])
+def get_threads(id):
+    threads = queries.getThreadsFromBoardAsJsons(conn, id)
 
     return threads
 
 
-@app.route('/get/replies/<threadID>', methods=["GET"])
-def get_replies(threadID):
-    replies = queries.getRepliesFromThreadAsJsons(conn, threadID)
+@app.route('/get/replies/<id>', methods=["GET"])
+def get_replies(id):
+    replies = queries.getRepliesFromThreadAsJsons(conn, id)
     return replies
 
 
