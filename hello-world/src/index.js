@@ -27,83 +27,79 @@ import {CategoryContainer, ThreadsContainer, Thread} from './containers.js';
 
 ///////////// Routing practice
 
-class navBar extends React.Component {
+export default function App() {
+  return (
+    <Router>
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/category:id/boards">Boards</Link>
+            </li>
+            <li>
+              <Link to="/board:id/threads">Threads</Link>
+            </li>
+          </ul>
+        </nav>
 
-    constructor(props) {
-        super(props);
-    }
-
-    componentDidMount() {
-    }
-
-    Home() {
-      return (
-        <div>
-          <h2>Home</h2>
-        </div>
-      );
-    }
-
-    About() {
-      return (
-        <div>
-          <h2>About</h2>
-        </div>
-      );
-    }
-
-    Dashboard() {
-      return (
-        <div>
-          <h2>Dashboard</h2>
-        </div>
-      );
-    }
-
-    render() {
-        return (
-            <div class="router">
-                <Router>
-                  <div>
-                    <ul>
-                      <li>
-                        <Link to="/">Home</Link>
-                      </li>
-                      <li>
-                        <Link to="/about">About</Link>
-                      </li>
-                      <li>
-                        <Link to="/dashboard">Dashboard</Link>
-                      </li>
-                    </ul>
-
-                    <hr />
-
-                    {/*
-                      A <Switch> looks through all its children <Route>
-                      elements and renders the first one whose path
-                      matches the current URL. Use a <Switch> any time
-                      you have multiple routes, but you want only one
-                      of them to render at a time
-                    */}
-                    <Switch>
-                      <Route exact path="/">
-                        {this.Home()}
-                      </Route>
-                      <Route path="/about">
-                        {this.About()}
-
-                      </Route>
-                      <Route path="/dashboard">
-                        {this.Dashboard()}
-                      </Route>
-                    </Switch>
-                  </div>
-                </Router>
-            </div>
-        );
-    }
+        {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+        <Switch>
+          <Route path="/category:id/boards">
+            <Boards />
+          </Route>
+          <Route path="/board:id/threads">
+            <Users />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
+  );
 }
+
+function renderCategories(num) {
+
+    let categories = [];
+
+    for (let i = 0; i < num; i++) {
+        categories.push(
+            <CategoryContainer
+                boardNum={3}
+            />
+        )
+    }
+
+    return categories;
+}
+
+function renderThread() {
+    return <Thread></Thread>;
+}
+
+function renderThreadInfo() {
+    return <ThreadsContainer></ThreadsContainer>;
+}
+
+function Home() {
+  return <div>{renderCategories(1)}</div>;
+}
+
+function Boards() {
+  return <div>{renderThreadInfo()}</div>;
+}
+
+function Users() {
+  return <div>{renderThread()}</div>;
+}
+
+
+
 ///////////// Routing practice
 
 
@@ -132,20 +128,20 @@ class Main extends React.Component {
 
     // == Rendering ==
 
-    renderCategories(num) {
-
-        let categories = [];
-
-        for (let i = 0; i < num; i++) {
-            categories.push(
-                <CategoryContainer
-                    boardNum={3}
-                />
-            )
-        }
-
-        return categories;
-    }
+//    renderCategories(num) {
+//
+//        let categories = [];
+//
+//        for (let i = 0; i < num; i++) {
+//            categories.push(
+//                <CategoryContainer
+//                    boardNum={3}
+//                />
+//            )
+//        }
+//
+//        return categories;
+//    }
 
     renderThreadInfo() {
         return <ThreadsContainer></ThreadsContainer>
@@ -224,8 +220,9 @@ class Main extends React.Component {
 
 ReactDOM.render(
     <Router>
-        <navBar />
+        <App />
     </Router>,
-    <Main />,
+    //<Main />,
+
     document.getElementById('root')
 );

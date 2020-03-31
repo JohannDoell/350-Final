@@ -47,7 +47,7 @@ class CategoryContainer extends React.Component {
         return (
             <div className="categoryContainer">
                 <div className="categoryText">
-                    <p>Category</p>
+                    <p>Categories</p>
                 </div>
             {this.renderBoards(1)}
             </div>
