@@ -5,14 +5,13 @@ import $ from 'jquery';
 import './index.css';
 import { Link } from 'react-router-dom';
 
-
 import blankSquare from './images/blanksquare.png';
 
 // ==== Global Variables ====
 
 // ==== Classes ====
 
-export class HomeContainer extends React.Component {
+class HomeContainer extends React.Component {
     constructor(props) {
         super(props);
 
@@ -73,11 +72,11 @@ class CategoryContainer extends React.Component {
           })
     }
 
-    renderBoards(num) {
+    renderBoards() {
         let boards = [];
 
         if (this.state.boards.length != 0){
-            for (let i = 0; i < num; i++) {
+            for (let i = 0; i < this.state.boards.length; i++) {
                 boards.push(
                 <Link to={`/boards/${this.state.boards[i]["boardID"]}`}>
                     <BoardContainer
@@ -109,6 +108,7 @@ class BoardContainer extends React.Component {
 
         return (
             <div className="boardContainer">
+
                 <div className="boardGeneralInfo">
                     <div className="boardTitle">
                         <p>{this.props.boardTitle}</p>
@@ -149,10 +149,10 @@ class ThreadsContainer extends React.Component { //board
           })
     }
 
-    renderThreads(num) {
+    renderThreads() {
         let threads = [];
 
-        for (let i = 0; i < num; i++) {
+        for (let i = 0; i < this.state.threads.length; i++) {
             if (this.state.threads.length != 0){
                 threads.push(
                 <Link to={`/thread/${this.state.threads[i]["threadID"]}`}>
@@ -177,7 +177,7 @@ class ThreadsContainer extends React.Component { //board
                 <div className="threadsContainerInfo">
                     <p>Threads</p>
                 </div>
-                {this.renderThreads(this.state.threads.length)}
+                {this.renderThreads()}
 
             </div>
 
@@ -236,10 +236,10 @@ class Thread extends React.Component {
           })
     }
 
-    renderReplies(num) {
+    renderReplies() {
         let replies = [];
 
-        for (let i = 0; i < num; i++) {
+        for (let i = 0; i < this.state.replies.length; i++) {
             if (this.state.replies.length != 0){
                 replies.push(
 
@@ -262,9 +262,8 @@ class Thread extends React.Component {
                 <div className="threadTitle">
                     <p>Thread: {this.props.threadInfoTitle}</p>
                 </div>
-                {this.renderReplies(this.state.replies.length)}
+                {this.renderReplies()}
             </div>
-
         );
     }
 }
@@ -279,7 +278,7 @@ class Reply extends React.Component {
         return (
             <div className="reply">
                 <div className="replyUser">
-                    <p>Author: {this.props.replyUser}</p>
+                    <p>{this.props.replyUser}</p>
                 </div>
                 <div className="replyText">
                     <p>{this.props.replyText}</p>
@@ -289,6 +288,36 @@ class Reply extends React.Component {
     }
 }
 
+class Input extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: ''
+        };
+
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(event) {
+        this.setState({value: event.target.value});
+    }
+
+    render() {
+        return (
+            <div>
+                <div className="inputContainer">
+                    <p>Reply</p>
+                    <label>
+                        <textarea className="inputBox" value={this.state.value} onChange={this.handleChange}></textarea>
+                    </label>
+                    <input type="submit" value="Submit"/>
+                </div>
+            </div>
+        );
+    }
+}
+
 // === React Export ===
 
-export {CategoryContainer, ThreadsContainer, Thread}
+export {HomeContainer, CategoryContainer, ThreadsContainer, Thread, Input}

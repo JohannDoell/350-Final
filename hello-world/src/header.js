@@ -25,10 +25,10 @@ class NavBar extends React.Component {
         return (
             <div className="navBar">
             <button className="navBarButton" onClick={this.props.onClick}>
-                Test1
+                Home
             </button>
             <button className="navBarButton" onClick={this.props.onClick}>
-                Test2
+                Members
             </button>
             </div>
         );
@@ -40,9 +40,53 @@ class Header extends React.Component {
         return (
             <div className="header">
             <Banner/>
+            <Login></Login>
             <p>Welcome user!</p>
-            <p>{this.props.serverMessage}</p>
             <NavBar/>
+            </div>
+        );
+    }
+}
+
+class Credits extends React.Component {
+    render() {
+        return (
+            <div className="credits">
+                <p>CMPT 350 - Winter 2019-2020</p>
+            </div>
+        );
+    }
+}
+
+class Login extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            username: '',
+            password: ''
+        };
+
+        this.handleChangeUsername = this.handleChangeUsername.bind(this);
+        this.handleChangePassword = this.handleChangePassword.bind(this);
+    }
+
+    handleChangeUsername(event) {
+        this.setState({username: event.target.value});
+    }
+
+    handleChangePassword(event) {
+        this.setState({password: event.target.value});
+    }
+
+    render() {
+        return (
+            <div className="login">
+                <p>Login:</p>
+                <label>
+                    <input type="text" value={this.state.username} onChange={this.handleChangeUsername}></input>
+                    <input type="password" value={this.state.password} onChange={this.handleChangePassword}></input>
+                    <input type="submit" value="Submit"/>
+                </label>
             </div>
         );
     }
@@ -51,3 +95,4 @@ class Header extends React.Component {
 // === React Export ===
 
 export default Header;
+export {Header, Credits}

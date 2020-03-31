@@ -15,8 +15,12 @@ import {
 
 import $ from 'jquery';
 import './index.css';
-import Header from './header.js';
-import {CategoryContainer, ThreadsContainer, Thread, HomeContainer} from './containers.js';
+
+
+// === React Import ===
+
+import {Header, Credits} from './header.js';
+import {HomeContainer, CategoryContainer, ThreadsContainer, Thread, Input } from './containers.js';
 
 // === Images ===
 
@@ -39,11 +43,7 @@ export default function App() {
   );
 }
 
-
-
 // render functions
-
-
 
 function renderCategories(num) {
 
@@ -67,10 +67,6 @@ function renderHeader() {
         />
     );
 }
-
-
-
-
 
 // components
 class Home extends React.Component {
@@ -134,8 +130,6 @@ class AThread extends React.Component {
     }
 }
 
-
-
 ///////////// Routing practice
 
 
@@ -162,7 +156,6 @@ class Main extends React.Component {
     renderHeader() {
         return (
             <Header
-                serverMessage={this.state.response}
             />
         );
     }
@@ -206,6 +199,8 @@ class Main extends React.Component {
                 {this.renderCategories(1)}
                 {this.renderThreadInfo()}
                 {this.renderThread()}
+                <Input></Input>
+                <Credits></Credits>
             </div>
         );
     }
