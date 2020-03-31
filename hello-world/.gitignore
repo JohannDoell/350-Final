@@ -23,4 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 
 # pycharm
+/server/__pycache__
 
