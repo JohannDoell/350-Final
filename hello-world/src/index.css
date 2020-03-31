@@ -32,7 +32,7 @@ ol, ul {
 
 /* === React Classes === */
 
-.mainContainer {
+.generalContainer {
   background-color: #2a59a3;
   height: 100%;
   margin-left: 300px;

@@ -85,9 +85,10 @@ class Home extends React.Component {
     render() {
         console.log(this.props)
         return (
-        <div>
+        <div className="generalContainer">
             {renderHeader()}
             {this.renderHomeContainer()}
+            <Credits></Credits>
         </div>
         );
     }
@@ -104,9 +105,10 @@ class Boards extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="generalContainer">
                 {renderHeader()}
                 {this.renderThreadInfo()}
+                <Credits></Credits>
             </div>
         );
     }
@@ -122,9 +124,10 @@ class AThread extends React.Component {
     }
     render() {
         return (
-            <div>
+            <div className="generalContainer">
                 {renderHeader()}
                 {this.renderThread()}
+                <Credits></Credits>
             </div>
         );
     }
@@ -195,7 +198,7 @@ class Main extends React.Component {
     render() {
         return (
             <div className="mainContainer">
-                {this.renderHeader()}
+                <Header/>
                 {this.renderCategories(1)}
                 {this.renderThreadInfo()}
                 {this.renderThread()}
