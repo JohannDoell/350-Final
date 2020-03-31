@@ -30,29 +30,11 @@ import {CategoryContainer, ThreadsContainer, Thread, HomeContainer} from './cont
 export default function App() {
   return (
     <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/boards/:id">Boards</Link>
-            </li>
-            <li>
-              <Link to="/thread/:id">Threads</Link>
-            </li>
-          </ul>
-        </nav>
-
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
         <Switch>
           <Route path="/boards/:id" component={Boards} />
           <Route path="/thread/:id" component={AThread} />
           <Route path="/" component={Home} />
         </Switch>
-      </div>
     </Router>
   );
 }
