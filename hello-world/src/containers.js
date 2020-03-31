@@ -20,7 +20,8 @@ class CategoryContainer extends React.Component {
         };
     }
     componentDidMount() {
-        fetch('http://localhost:5000/get/boards')
+        const { match : {params}} = this.props;
+        fetch(`http://localhost:5000/get/boards/${params.boardID}`)
           .then(response => response.json())
           .then((data) => {
             this.setState({ boards : data })
@@ -49,7 +50,7 @@ class CategoryContainer extends React.Component {
                 <div className="categoryText">
                     <p>Categories</p>
                 </div>
-            {this.renderBoards(1)}
+            {this.renderBoards(this.state.boards.length)}
             </div>
         );
     }

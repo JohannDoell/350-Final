@@ -37,10 +37,10 @@ export default function App() {
               <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to="/category:id/boards">Boards</Link>
+              <Link to="/category/:id/boards">Boards</Link>
             </li>
             <li>
-              <Link to="/board:id/threads">Threads</Link>
+              <Link to="/board/:id/threads">Threads</Link>
             </li>
           </ul>
         </nav>
@@ -48,11 +48,11 @@ export default function App() {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/category:id/boards">
+          <Route path="/category/:id/boards">
             <Boards />
           </Route>
-          <Route path="/board:id/threads">
-            <Users />
+          <Route path="/board/:id/threads">
+            <AThread />
           </Route>
           <Route path="/">
             <Home />
@@ -63,6 +63,9 @@ export default function App() {
   );
 }
 
+
+
+// render functions
 function renderCategories(num) {
 
     let categories = [];
@@ -78,24 +81,53 @@ function renderCategories(num) {
     return categories;
 }
 
-function renderThread() {
-    return <Thread></Thread>;
+
+function renderHeader() {
+    return (
+        <Header
+        />
+    );
 }
+
 
 function renderThreadInfo() {
     return <ThreadsContainer></ThreadsContainer>;
 }
 
-function Home() {
-  return <div>{renderCategories(1)}</div>;
+
+function renderThread() {
+    return <Thread></Thread>
 }
+
+
+// components
+function Home() {
+  return (
+    <div>
+        {renderHeader()}
+        {renderCategories(1)}
+    </div>
+    );
+}
+
 
 function Boards() {
-  return <div>{renderThreadInfo()}</div>;
+    return (
+        <div>
+            {renderHeader()}
+            {renderThreadInfo()}
+        </div>
+    );
 }
 
-function Users() {
-  return <div>{renderThread()}</div>;
+
+function AThread() {
+    return (
+        <div>
+            {renderHeader()}
+            {renderThread()}
+        </div>
+    );
 }
 
 
@@ -124,31 +156,6 @@ class Main extends React.Component {
     // == Lifecycle ==
 
     componentDidMount() {
-    }
-
-    // == Rendering ==
-
-//    renderCategories(num) {
-//
-//        let categories = [];
-//
-//        for (let i = 0; i < num; i++) {
-//            categories.push(
-//                <CategoryContainer
-//                    boardNum={3}
-//                />
-//            )
-//        }
-//
-//        return categories;
-//    }
-
-    renderThreadInfo() {
-        return <ThreadsContainer></ThreadsContainer>
-    }
-
-    renderThread() {
-        return <Thread></Thread>
     }
 
     renderHeader() {
