@@ -261,6 +261,15 @@ ol, ul {
   padding-bottom: 20px;
 }
 
+.login {
+  width: 50px;
+  max-width: 50px;
+  min-width: 50px;
+  text-align: left;
+  padding-left: 10px;
+  margin: 0%;
+}
+
 /* Images */
 
 .banner {
