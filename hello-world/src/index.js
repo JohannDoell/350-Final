@@ -16,7 +16,7 @@ import {
 import $ from 'jquery';
 import './index.css';
 import Header from './header.js';
-import {CategoryContainer, ThreadsContainer, Thread} from './containers.js';
+import {CategoryContainer, ThreadsContainer, Thread, HomeContainer} from './containers.js';
 
 // === Images ===
 
@@ -37,10 +37,10 @@ export default function App() {
               <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to="/category/:id/boards">Boards</Link>
+              <Link to="/boards/:id">Boards</Link>
             </li>
             <li>
-              <Link to="/board/:id/threads">Threads</Link>
+              <Link to="/threads/:id">Threads</Link>
             </li>
           </ul>
         </nav>
@@ -48,15 +48,9 @@ export default function App() {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/category/:id/boards">
-            <Boards />
-          </Route>
-          <Route path="/board/:id/threads">
-            <AThread />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
+          <Route path="/boards/:categoryID" component={Boards} />
+          <Route path="/threads/:boardID" component={AThread} />
+          <Route path="/" component={Home} />
         </Switch>
       </div>
     </Router>
@@ -66,6 +60,17 @@ export default function App() {
 
 
 // render functions
+
+function renderHomeContainer() {
+    let home = [];
+
+    home.push(
+        <HomeContainer
+        />
+    )
+    return home;
+}
+
 function renderCategories(num) {
 
     let categories = [];
@@ -105,7 +110,8 @@ function Home() {
   return (
     <div>
         {renderHeader()}
-        {renderCategories(1)}
+        {renderHomeContainer()}
+        //{this.props.children}
     </div>
     );
 }
@@ -139,23 +145,20 @@ class Main extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // New
-            response: 'Not connected to server.'
-
+        categories: [],
         };
-        // Bind functions here
-        // EX:
-        //this.handleMessageChange = this.handleMessageChange.bind(this);
-
-        this.getTest = this.getTest.bind(this);
-
-
-        this.getTest();
     }
 
     // == Lifecycle ==
 
     componentDidMount() {
+        //const { match : {params}} = this.props;
+        fetch("http://localhost:5000/get/categories")
+          .then(response => response.json())
+          .then((data) => {
+            this.setState({ categories : data })
+            console.log(this.state)
+          })
     }
 
     renderHeader() {
@@ -194,19 +197,6 @@ class Main extends React.Component {
         }).done(function (data) {
             console.log(data);
         });
-    }
-
-    // = GET =
-
-    getTest() {
-        fetch("http://localhost:5000/")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    console.log(result);
-                    this.setState({ response: result });
-                }
-            )
     }
 
     // == Render Self ==

@@ -11,21 +11,61 @@ import blankSquare from './images/blanksquare.png';
 
 // ==== Classes ====
 
+export class HomeContainer extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+        categories: [],
+
+        };
+    }
+
+    componentDidMount() {
+        //console.log(match.params)
+        fetch("http://localhost:5000/get/categories")
+          .then(response => response.json())
+          .then((data) => {
+            this.setState({ categories : data })
+          });
+    }
+
+    renderCategories(num) {
+        let categories = [];
+
+        if (this.state.categories.length != 0){
+            for (let i = 0; i < num; i++) {
+                categories.push(
+                    <CategoryContainer
+                        categoryTitle = {this.state.categories[i]["categoryName"]}
+                    />
+                )
+            }
+        }
+        return categories;
+    }
+
+    render(){
+        return <div>{this.renderCategories(this.state.categories.length)}</div>;
+    }
+}
+
+
 class CategoryContainer extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
         boards: [],
+
         };
     }
     componentDidMount() {
-        const { match : {params}} = this.props;
-        fetch(`http://localhost:5000/get/boards/${params.boardID}`)
+        //const { match : {params}} = this.props;
+        fetch("http://localhost:5000/get/boards/${params.categoryID")
           .then(response => response.json())
           .then((data) => {
             this.setState({ boards : data })
-            console.log(this.state)
           })
     }
 
@@ -48,7 +88,7 @@ class CategoryContainer extends React.Component {
         return (
             <div className="categoryContainer">
                 <div className="categoryText">
-                    <p>Categories</p>
+                    <p>{this.props.categoryTitle}</p>
                 </div>
             {this.renderBoards(this.state.boards.length)}
             </div>
@@ -96,7 +136,6 @@ class ThreadsContainer extends React.Component { //board
           .then(response => response.json())
           .then((data) => {
             this.setState({ threads : data })
-            console.log(this.state)
           })
     }
 
