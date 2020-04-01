@@ -90,11 +90,20 @@ def insert_reply(id):
     response = request.get_json()
     response["threadID"] = int(id)
     response = json.dumps(response)
-    print(type(response))
-    print(response)
     queries.insertReply(conn, response)
     conn.commit()
     return "reply post received"
+
+@app.route('/get/boards/<id>', methods=["POST"])
+def insert_thread(id):
+    response = request.get_json()
+    response["boardID"] = int(id)
+    response = json.dumps(response)
+    print(type(response))
+    print(response)
+    queries.insertThread(conn, response)
+    conn.commit()
+    return "thread post received"
 
 
 # == Get ==

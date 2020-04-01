@@ -12,7 +12,6 @@ import {
     Route,
     Link
 } from "react-router-dom";
-
 import $ from 'jquery';
 import './index.css';
 
@@ -20,7 +19,7 @@ import './index.css';
 // === React Import ===
 
 import {Header, Credits} from './header.js';
-import {HomeContainer, CategoryContainer, ThreadsContainer, Thread, ReplyForm, ToggleReplyForm } from './containers.js';
+import {HomeContainer, ThreadsContainer, Thread, ToggleReplyForm, ThreadForm } from './containers.js';
 
 // === Images ===
 
@@ -32,12 +31,11 @@ var username = "";
 // ==== Classes ====
 
 
-///////////// Routing practice
-
 export default function App() {
   return (
     <Router>
         <Switch>
+          <Route path="/boards/:id/submit" component={CreateThread}/>
           <Route path="/boards/:id" component={Boards} />
           <Route path="/thread/:id" component={AThread} />
           <Route path="/login" component={Login} />
@@ -48,23 +46,10 @@ export default function App() {
   );
 }
 
-// render functions
-
-function renderCategories(num) {
-
-    let categories = [];
-
-    for (let i = 0; i < num; i++) {
-        categories.push(
-            <CategoryContainer
-                boardNum={3}
-            />
-        )
-    }
-
-    return categories;
+function isValid(text) {
+    return text.length >= 0
 }
-
+// render functions
 
 function renderHeader() {
     if (userID === -1) {
@@ -119,10 +104,12 @@ class Boards extends React.Component {
     }
 
     render() {
+        const { match : {params}} = this.props;
         return (
             <div className="generalContainer">
                 {renderHeader()}
                 {this.renderThreadInfo()}
+                <Link to={`/boards/${params.id}/submit`}>New</Link>
                 <Credits></Credits>
             </div>
         );
@@ -134,8 +121,7 @@ class AThread extends React.Component {
 
     renderThread() {
         return <Thread
-        match = {this.props.match}
-
+            match = {this.props.match}
         />
     }
     render() {
@@ -214,6 +200,27 @@ class Registration extends React.Component {
                 </form>
                 </div>
 
+                <Credits></Credits>
+            </div>
+        );
+    }
+}
+
+class CreateThread extends React.Component {
+
+    renderThreadForm() {
+        return (
+            <ThreadForm
+                match= {this.props.match} 
+            />
+        );
+    }
+
+    render() {
+        return (
+            <div className="generalContainer">
+                {renderHeader()}
+                {this.renderThreadForm()}
                 <Credits></Credits>
             </div>
         );
