@@ -12,6 +12,7 @@ import {
     Route,
     Link
 } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import $ from 'jquery';
 import './index.css';
 
@@ -30,6 +31,16 @@ var username = "";
 
 // ==== Classes ====
 
+class Head extends React.PureComponent {
+  render () {
+    return (
+        <Helmet>
+          <title>titre</title>
+          <link rel="icon" type="image/png" href="src/images/logo-via-logohub.png" sizes="16x16" />
+        </Helmet>
+    );
+  }
+}
 
 export default function App() {
   return (
@@ -46,9 +57,6 @@ export default function App() {
   );
 }
 
-function isValid(text) {
-    return text.length >= 0
-}
 // render functions
 
 function renderHeader() {
@@ -380,7 +388,9 @@ class Main extends React.Component {
 // ========================================
 
 ReactDOM.render(
+
     <Router>
+        <Head />,
         <App />
     </Router>,
     //<Main />,
