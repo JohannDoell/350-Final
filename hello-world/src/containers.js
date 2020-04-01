@@ -345,6 +345,10 @@ class ReplyForm extends React.Component {
 
    async handleSubmit(event){
         const { match : {params}} = this.props;
+        if (!this.state.body.length >= 1){
+            alert("You can't post an empty reply! ")
+            return;
+        }
         event.preventDefault();
         const data = {
             threadID: this.state.threadID,

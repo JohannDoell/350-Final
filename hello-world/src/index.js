@@ -29,8 +29,6 @@ import {HomeContainer, ThreadsContainer, Thread, ToggleReplyForm, ThreadForm } f
 // ==== Classes ====
 
 
-///////////// Routing practice
-
 export default function App() {
   return (
     <Router>
@@ -44,6 +42,9 @@ export default function App() {
   );
 }
 
+function isValid(text) {
+    return text.length >= 0
+}
 // render functions
 
 function renderHeader() {
