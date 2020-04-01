@@ -6,58 +6,394 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+} from "react-router-dom";
 import $ from 'jquery';
 import './index.css';
 
+
+// === React Import ===
+
+import {Header, Credits} from './header.js';
+import {HomeContainer, ThreadsContainer, Thread, ToggleReplyForm, ThreadForm } from './containers.js';
+
+// === Images ===
+
 // ==== Global Variables ====
 
+var userID = -1;
+var username = "";
 
 // ==== Classes ====
 
-class SendButton extends React.Component {
-    render() {
+export default function App() {
+  return (
+    <Router>
+        <Switch>
+          <Route path="/boards/:id/submit" component={CreateThread}/>
+          <Route path="/boards/:id" component={Boards} />
+          <Route path="/thread/:id" component={AThread} />
+          <Route path="/login" component={Login} />
+          <Route path="/register" component={Registration} />
+          <Route path="/logout" component={Logout} />
+          <Route path="/" component={Home} />
+        </Switch>
+    </Router>
+  );
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
+
+// render functions
+function renderHeader() {
+
+    console.log(getCookie("userID"));
+    console.log(getCookie("username"));
+    if (getCookie("userID") !== "") {
+        userID = getCookie("userID");
+    }
+    if (getCookie("username") !== "") {
+        username = getCookie("username");
+    }
+    
+    
+
+    if (userID === -1) {
         return (
-            <button className="sendbutton" onClick={this.props.onClick}>
-                Send
-            </button>
+            <Header
+            />
+        );
+    } else {
+        return (
+            <div>
+            <Header
+            givenUsernameMessage = {"Hello, " + username + "!"}
+            />
+            </div>
         );
     }
 }
+
+// components
+class Home extends React.Component {
+
+     renderHomeContainer(props) {
+        let home = [];
+
+        home.push(
+            <HomeContainer
+                match = {this.props.match}
+            />
+        )
+        return home;
+    }
+
+    render() {
+        console.log(this.props)
+        return (
+        <div className="generalContainer">
+            {renderHeader()}
+            {this.renderHomeContainer()}
+            <Credits></Credits>
+        </div>
+        );
+    }
+}
+
+
+class Boards extends React.Component {
+
+    renderThreadInfo() {
+        return <ThreadsContainer
+            match = {this.props.match}
+        />
+    }
+
+    render() {
+        const { match : {params}} = this.props;
+        if (userID === -1) {
+            return (
+                <div className="generalContainer">
+                    {renderHeader()}
+                    {this.renderThreadInfo()}
+                    <Credits></Credits>
+                </div>
+            );
+        } else {
+            return(
+                <div className="generalContainer">
+                {renderHeader()}
+                {this.renderThreadInfo()}
+                <Link to={`/boards/${params.id}/submit`}>
+                    <button className="navBarButton" onClick={this.props.onClick}>
+                        New Thread
+                    </button>
+                </Link>
+                <Credits></Credits>
+                </div>
+            );
+
+        }
+
+    }
+}
+
+
+class AThread extends React.Component {
+
+    renderThread() {
+        return <Thread
+            match = {this.props.match}
+        />
+    }
+    render() {
+        return (
+            <div className="generalContainer">
+                {renderHeader()}
+                {this.renderThread()}
+
+                <ToggleReplyForm match={this.props.match} givenUserID={userID}/>
+                <Credits></Credits>
+            </div>
+        );
+    }
+}
+
+class Registration extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            usernameValue: '',
+            passwordValue: ''
+        };
+
+        this.handleChangeUsername = this.handleChangeUsername.bind(this);
+        this.handleChangePassword = this.handleChangePassword.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChangeUsername(event) {
+        this.setState({usernameValue: event.target.value});
+    }
+
+    handleChangePassword(event) {
+        this.setState({passwordValue: event.target.value});
+    }
+
+    async handleSubmit(event) {
+        event.preventDefault();
+        const data = {
+            username: this.state.usernameValue,
+            password: this.state.passwordValue,
+            };
+        console.log(data);
+
+        await fetch('http://localhost:5000/post/register_user/', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+        this.setState({ state: this.state });
+    }
+
+    render() {
+        return (
+            <div className="generalContainer">
+                {renderHeader()}
+
+                <div className="register">
+                <p>Register:</p>
+                <form onSubmit={this.handleSubmit}>
+                    <label>
+                        <input type="text" value={this.state.usernameValue} onChange={this.handleChangeUsername}></input>
+                        <input type="password" value={this.state.passwordValue} onChange={this.handleChangePassword}></input>
+                        <input className="navBarButton" type="submit" value="Submit"/>
+                    </label>
+                </form>
+                </div>
+
+                <Credits></Credits>
+            </div>
+        );
+    }
+}
+
+class CreateThread extends React.Component {
+
+    renderThreadForm() {
+        return (
+            <ThreadForm
+                match= {this.props.match} 
+            />
+        );
+    }
+
+    render() {
+        return (
+            <div className="generalContainer">
+                {renderHeader()}
+                {this.renderThreadForm()}
+                <Credits></Credits>
+            </div>
+        );
+    }
+}
+
+class Login extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            usernameValue: '',
+            passwordValue: ''
+        };
+
+        this.handleChangeUsername = this.handleChangeUsername.bind(this);
+        this.handleChangePassword = this.handleChangePassword.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChangeUsername(event) {
+        this.setState({ usernameValue: event.target.value });
+    }
+
+    handleChangePassword(event) {
+        this.setState({ passwordValue: event.target.value });
+    }
+
+    async handleSubmit(event) {
+        // console.log(this.state.usernameValue);
+        // console.log(this.state.passwordValue);
+        event.preventDefault();
+        const data = {
+            username: this.state.usernameValue,
+            password: this.state.passwordValue,
+        };
+        console.log(data);
+
+        await fetch('http://localhost:5000/post/login_user/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                console.log(document.cookie);
+                userID = data;
+                console.log(this.state.usernameValue);
+                username = this.state.usernameValue;
+                document.cookie = "userID=; username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                document.cookie = "userID=" + userID + "; username=" + username + "; path=/;";
+                console.log(document.cookie);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        this.setState({ state: this.state });
+    }
+
+    render() {
+        return (
+
+            <div className="generalContainer">
+                {renderHeader()}
+
+                <div className="login">
+                <p>Login:</p>
+                <form onSubmit={this.handleSubmit}>
+                    <label>
+                        <input type="text" value={this.state.usernameValue} onChange={this.handleChangeUsername}></input>
+                        <input type="password" value={this.state.passwordValue} onChange={this.handleChangePassword}></input>
+                        <input className="navBarButton" type="submit" value="Submit" />
+                    </label>
+                </form>
+                </div>
+
+                <Credits></Credits>
+            </div>
+
+
+        );
+    }
+}
+
+class Logout extends React.Component {
+
+    componentDidMount() {
+        // Clear cookie
+        document.cookie = "userID=; username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        userID = -1;
+        username = "";
+        window.location.href = `/`;
+    }
+
+    render() {
+        return(
+            <div className="generalContainer">
+            {renderHeader()}
+            <Credits></Credits>
+            </div>
+        )
+    }
+}
+
+///////////// Routing practice
+
 
 class Main extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // Old, just to show an example.
-            showchat: true,
-            message: '',
-            chatlog: [],
-
-            // New
-            response: 'Not connected to server.'
-
+        categories: [],
         };
-        // Bind functions here
-        // EX:
-        //this.handleMessageChange = this.handleMessageChange.bind(this);
-
-        this.getTest = this.getTest.bind(this);
-
-
-        this.getTest();
     }
 
     // == Lifecycle ==
 
     componentDidMount() {
+        //const { match : {params}} = this.props;
+        fetch("http://localhost:5000/get/categories")
+          .then(response => response.json())
+          .then((data) => {
+            this.setState({ categories : data })
+            console.log(this.state)
+          })
     }
 
-    // == Rendering ==
-
-    renderSendButton() {
+    renderHeader() {
         return (
-            <SendButton
-                onClick={() => this.sendClick()}
+            <Header
             />
         );
     }
@@ -65,28 +401,13 @@ class Main extends React.Component {
     // == Handle ==
 
     sendClick() {
-        this.sendMessage(this.state.message);
         this.setState({ message: '' });
     }
 
     // == Functionality ==
 
     initUser() {
-        //username = this.state.username;
 
-        //console.log(username);
-
-        /*
-        if (username === "") {
-            alert("Username cannot be empty");
-        } else {
-            this.registerUser();
-            connected = true;
-            setInterval(this.getChatlog, timeBetweenNextChatlogCheck);
-            setInterval(this.getRooms, timeBetweenNextChatlogCheck);
-            this.forceUpdate();
-        }
-        */
     }
 
     // == Rest API ==
@@ -107,38 +428,29 @@ class Main extends React.Component {
         });
     }
 
-    sendMessage(message) {
-
-    }
-
-    // = GET =
-
-    getTest() {
-      fetch("http://localhost:5000/get_test/")
-        .then(res => res.json())
-        .then(
-          (result) => {
-            console.log(result);
-            this.setState({ response: result});
-          }
-        )
-    }
-
     // == Render Self ==
 
     render() {
-                return (
-                  <div>
-                    <p>Hello World</p>
-                    <p>{this.state.response}</p>
-                  </div>
-                );
+        return (
+            <div className="mainContainer">
+                <Header/>
+                {this.renderCategories(1)}
+                {this.renderThreadInfo()}
+                {this.renderThread()}
+                <Credits></Credits>
+            </div>
+        );
     }
 }
 
 // ========================================
 
 ReactDOM.render(
-    <Main />,
+
+    <Router>
+        <App />
+    </Router>,
+    //<Main />,
+
     document.getElementById('root')
 );
