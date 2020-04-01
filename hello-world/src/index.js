@@ -20,7 +20,7 @@ import './index.css';
 // === React Import ===
 
 import {Header, Credits} from './header.js';
-import {HomeContainer, CategoryContainer, ThreadsContainer, Thread, Input } from './containers.js';
+import {HomeContainer, ThreadsContainer, Thread, ToggleReplyForm, ThreadForm } from './containers.js';
 
 // === Images ===
 
@@ -35,6 +35,7 @@ export default function App() {
   return (
     <Router>
         <Switch>
+          <Route path="/boards/:id/submit" component={CreateThread}/>
           <Route path="/boards/:id" component={Boards} />
           <Route path="/thread/:id" component={AThread} />
           <Route path="/" component={Home} />
@@ -44,22 +45,6 @@ export default function App() {
 }
 
 // render functions
-
-function renderCategories(num) {
-
-    let categories = [];
-
-    for (let i = 0; i < num; i++) {
-        categories.push(
-            <CategoryContainer
-                boardNum={3}
-            />
-        )
-    }
-
-    return categories;
-}
-
 
 function renderHeader() {
     return (
@@ -104,10 +89,12 @@ class Boards extends React.Component {
     }
 
     render() {
+        const { match : {params}} = this.props;
         return (
             <div className="generalContainer">
                 {renderHeader()}
                 {this.renderThreadInfo()}
+                <Link to={`/boards/${params.id}/submit`}>New</Link>
                 <Credits></Credits>
             </div>
         );
@@ -119,7 +106,7 @@ class AThread extends React.Component {
 
     renderThread() {
         return <Thread
-        match = {this.props.match}
+            match = {this.props.match}
         />
     }
     render() {
@@ -127,12 +114,32 @@ class AThread extends React.Component {
             <div className="generalContainer">
                 {renderHeader()}
                 {this.renderThread()}
+
+                <ToggleReplyForm match={this.props.match}/>
                 <Credits></Credits>
             </div>
         );
     }
 }
 
+class CreateThread extends React.Component {
+
+    renderThreadForm() {
+        return <ThreadForm
+            match = {this.props.match}
+        />
+    }
+
+    render() {
+        return (
+            <div className="generalContainer">
+            {renderHeader()}
+            {this.renderThreadForm()}
+            <Credits></Credits>
+            </div>
+        );
+    }
+}
 ///////////// Routing practice
 
 
@@ -202,7 +209,6 @@ class Main extends React.Component {
                 {this.renderCategories(1)}
                 {this.renderThreadInfo()}
                 {this.renderThread()}
-                <Input></Input>
                 <Credits></Credits>
             </div>
         );
