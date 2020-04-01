@@ -18,6 +18,20 @@ def insertThread(conn, threadJson):
     cur = conn.cursor()
     cur.execute(sql, thread)
 
+def updateThreadViews(conn, threadJson):
+    """
+    insert a thread into the database
+    :param conn: connection to the db
+    :param threadJson: the new thread data as a json object
+    :return: none
+    """
+    threadDict = json.loads(threadJson)
+    thread = (threadDict["threadID"])
+    sql = '''   UPDATE Threads
+                SET views = views + 1
+                WHERE ?'''
+    cur = conn.cursor()
+    cur.execute(sql, thread)
 
 def getThreadsFromBoardAsJsons(conn, boardID):
     """
@@ -112,6 +126,10 @@ def insertReply(conn, replyDict):
 
 
 def getUserAsDict(conn, userID):
+    """
+    get a user by their userID
+    :param conn: connection to the database
+    """
     conn.row_factory = dbConnection.sq.Row
     cur = conn.cursor()
     cur.execute("SELECT * FROM Users WHERE userID=?", (userID,))
@@ -119,6 +137,22 @@ def getUserAsDict(conn, userID):
     row = dict(cur.fetchone())
 
     return row
+
+def getUserByUsername(conn, userCredentials):
+    """
+    get a user by their username
+    :param conn: connection to the database
+    :param userCredentials: user credentials as a json object
+    """
+    conn.row_factory = dbConnection.sq.Row
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM Users WHERE username=?", (userCredentials["username"],))
+
+    try:
+        row = dict(cur.fetchone())
+        return row
+    except TypeError:
+        return False
 
 
 def getRepliesFromThreadAsJsons(conn, threadID):
@@ -159,7 +193,6 @@ def getUserAsJson(conn, userID):
 
 def insertUser(conn, userDict):
     """
-
     :param conn: connection to database
     :param userJson: json with user info
     :return: none
@@ -172,6 +205,7 @@ def insertUser(conn, userDict):
                 VALUES (?,?)'''
 
     cur.execute(sql, user)
+    conn.commit()
 
 
 if __name__ == "__main__":

@@ -36,6 +36,7 @@ class HomeContainer extends React.Component {
             for (let i = 0; i < num; i++) {
                 categories.push(
                     <CategoryContainer
+                        key = {i}
                         match = {this.props.match}
                         categoryTitle = {this.state.categories[i]["categoryName"]}
                     />
@@ -77,6 +78,7 @@ class CategoryContainer extends React.Component {
                 boards.push(
                 <Link to={`/boards/${this.state.boards[i]["boardID"]}`}>
                     <BoardContainer
+                        key = {i}
                         match = {this.props.match}
                         boardTitle = {this.state.boards[i]["boardName"]}
                     />
@@ -303,15 +305,23 @@ class ToggleReplyForm extends React.Component {
     }
 
     render() {
-        return (
-            <div>
-            <button onClick={this.handleClick}>{this.state.isToggleOn ? 'Close' : 'Reply'}</button>
-            {!this.state.isToggleOn && this.addToggleButton}
+        if (this.props.givenUserID === -1) {
+            return (
+                <div>
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                <button onClick={this.handleClick}>{this.state.isToggleOn ? 'Close' : 'Reply'}</button>
+                {!this.state.isToggleOn && this.addToggleButton}
+    
+                {this.state.isToggleOn && this.addToggleButton && <ReplyForm match={this.props.match} givenUserID={this.props.givenUserID}/>}
+    
+                </div>
+            );
+        }
 
-            {this.state.isToggleOn && this.addToggleButton && <ReplyForm match={this.props.match}/>}
-
-            </div>
-        );
     }
 }
 
@@ -335,7 +345,7 @@ class ReplyForm extends React.Component {
     handleChange(event) {
         this.setState({
         threadID: this.state.threadID,
-        userID: 1,
+        userID: this.props.givenUserID,
         body: event.target.value,
         dateCreated: "2020-03-31 18:30:41",
         dateEdited: "2020-03-31 18:30:41",

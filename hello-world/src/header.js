@@ -3,6 +3,10 @@
 import React from 'react';
 import $ from 'jquery';
 import './index.css';
+import {
+    Link
+} from "react-router-dom";
+
 
 // === Images ===
 
@@ -11,6 +15,18 @@ import bannerImage from './images/banner.png';
 // ==== Global Variables ====
 
 // ==== Classes ====
+
+class Header extends React.Component {
+    render() {
+        return (
+            <div className="header">
+                <Banner />
+                <p>{this.props.givenUsernameMessage}</p>
+                <NavBar />
+            </div>
+        );
+    }
+}
 
 class Banner extends React.Component {
     render() {
@@ -24,25 +40,26 @@ class NavBar extends React.Component {
     render() {
         return (
             <div className="navBar">
-            <button className="navBarButton" onClick={this.props.onClick}>
-                Home
-            </button>
-            <button className="navBarButton" onClick={this.props.onClick}>
-                Members
-            </button>
-            </div>
-        );
-    }
-}
-
-class Header extends React.Component {
-    render() {
-        return (
-            <div className="header">
-            <Banner/>
-            <Login></Login>
-            <p>Welcome user!</p>
-            <NavBar/>
+                <Link to={`/`}>
+                    <button className="navBarButton" onClick={this.props.onClick}>
+                        Home
+                    </button>
+                </Link>
+                <Link to={`/members`}>
+                    <button className="navBarButton" onClick={this.props.onClick}>
+                        Members
+                    </button>
+                </Link>
+                <Link to={`/login`}>
+                    <button className="navBarButton" onClick={this.props.onClick}>
+                        Login
+                    </button>
+                </Link>
+                <Link to={`/register`}>
+                    <button className="navBarButton" onClick={this.props.onClick}>
+                        Register
+                    </button>
+                </Link>
             </div>
         );
     }
@@ -58,41 +75,9 @@ class Credits extends React.Component {
     }
 }
 
-class Login extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: '',
-            password: ''
-        };
 
-        this.handleChangeUsername = this.handleChangeUsername.bind(this);
-        this.handleChangePassword = this.handleChangePassword.bind(this);
-    }
-
-    handleChangeUsername(event) {
-        this.setState({username: event.target.value});
-    }
-
-    handleChangePassword(event) {
-        this.setState({password: event.target.value});
-    }
-
-    render() {
-        return (
-            <div className="login">
-                <p>Login:</p>
-                <label>
-                    <input type="text" value={this.state.username} onChange={this.handleChangeUsername}></input>
-                    <input type="password" value={this.state.password} onChange={this.handleChangePassword}></input>
-                    <input type="submit" value="Submit"/>
-                </label>
-            </div>
-        );
-    }
-}
 
 // === React Export ===
 
 export default Header;
-export {Header, Credits}
+export { Header, Credits }

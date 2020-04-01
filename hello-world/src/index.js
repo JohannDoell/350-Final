@@ -12,7 +12,6 @@ import {
     Route,
     Link
 } from "react-router-dom";
-
 import $ from 'jquery';
 import './index.css';
 
@@ -26,6 +25,9 @@ import {HomeContainer, ThreadsContainer, Thread, ToggleReplyForm, ThreadForm } f
 
 // ==== Global Variables ====
 
+var userID = -1;
+var username = "";
+
 // ==== Classes ====
 
 
@@ -36,6 +38,8 @@ export default function App() {
           <Route path="/boards/:id/submit" component={CreateThread}/>
           <Route path="/boards/:id" component={Boards} />
           <Route path="/thread/:id" component={AThread} />
+          <Route path="/login" component={Login} />
+          <Route path="/register" component={Registration} />
           <Route path="/" component={Home} />
         </Switch>
     </Router>
@@ -48,10 +52,20 @@ function isValid(text) {
 // render functions
 
 function renderHeader() {
-    return (
-        <Header
-        />
-    );
+    if (userID === -1) {
+        return (
+            <Header
+            />
+        );
+    } else {
+        return (
+            <div>
+            <Header
+            givenUsernameMessage = {"Hello, " + username + "!"}
+            />
+            </div>
+        );
+    }
 }
 
 // components
@@ -116,7 +130,76 @@ class AThread extends React.Component {
                 {renderHeader()}
                 {this.renderThread()}
 
-                <ToggleReplyForm match={this.props.match}/>
+                <ToggleReplyForm match={this.props.match} givenUserID={userID}/>
+                <Credits></Credits>
+            </div>
+        );
+    }
+}
+
+class Registration extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            usernameValue: '',
+            passwordValue: ''
+        };
+
+        this.handleChangeUsername = this.handleChangeUsername.bind(this);
+        this.handleChangePassword = this.handleChangePassword.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChangeUsername(event) {
+        this.setState({usernameValue: event.target.value});
+    }
+
+    handleChangePassword(event) {
+        this.setState({passwordValue: event.target.value});
+    }
+
+    async handleSubmit(event) {
+        event.preventDefault();
+        const data = {
+            username: this.state.usernameValue,
+            password: this.state.passwordValue,
+            };
+        console.log(data);
+
+        await fetch('http://localhost:5000/post/register_user/', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+        this.setState({ state: this.state });
+    }
+
+    render() {
+        return (
+            <div className="generalContainer">
+                {renderHeader()}
+
+                <div className="register">
+                <p>Register:</p>
+                <form onSubmit={this.handleSubmit}>
+                    <label>
+                        <input type="text" value={this.state.usernameValue} onChange={this.handleChangeUsername}></input>
+                        <input type="password" value={this.state.passwordValue} onChange={this.handleChangePassword}></input>
+                        <input type="submit" value="Submit"/>
+                    </label>
+                </form>
+                </div>
+
                 <Credits></Credits>
             </div>
         );
@@ -126,21 +209,99 @@ class AThread extends React.Component {
 class CreateThread extends React.Component {
 
     renderThreadForm() {
-        return <ThreadForm
-            match = {this.props.match}
-        />
+        return (
+            <ThreadForm
+                match= {this.props.match} 
+            />
+        );
     }
 
     render() {
         return (
             <div className="generalContainer">
-            {renderHeader()}
-            {this.renderThreadForm()}
-            <Credits></Credits>
+                {renderHeader()}
+                {this.renderThreadForm()}
+                <Credits></Credits>
             </div>
         );
     }
 }
+
+class Login extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            usernameValue: '',
+            passwordValue: ''
+        };
+
+        this.handleChangeUsername = this.handleChangeUsername.bind(this);
+        this.handleChangePassword = this.handleChangePassword.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChangeUsername(event) {
+        this.setState({ usernameValue: event.target.value });
+    }
+
+    handleChangePassword(event) {
+        this.setState({ passwordValue: event.target.value });
+    }
+
+    async handleSubmit(event) {
+        // console.log(this.state.usernameValue);
+        // console.log(this.state.passwordValue);
+        event.preventDefault();
+        const data = {
+            username: this.state.usernameValue,
+            password: this.state.passwordValue,
+        };
+        console.log(data);
+
+        await fetch('http://localhost:5000/post/login_user/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data)
+                userID = data;
+                username = this.state.usernameValue;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        this.setState({ state: this.state });
+    }
+
+    render() {
+        return (
+
+            <div className="generalContainer">
+                {renderHeader()}
+
+                <div className="login">
+                <p>Login:</p>
+                <form onSubmit={this.handleSubmit}>
+                    <label>
+                        <input type="text" value={this.state.usernameValue} onChange={this.handleChangeUsername}></input>
+                        <input type="password" value={this.state.passwordValue} onChange={this.handleChangePassword}></input>
+                        <input type="submit" value="Submit" />
+                    </label>
+                </form>
+                </div>
+
+                <Credits></Credits>
+            </div>
+
+
+        );
+    }
+}
+
 ///////////// Routing practice
 
 

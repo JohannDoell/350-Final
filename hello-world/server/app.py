@@ -4,6 +4,7 @@ import json
 from flask import Flask, request, jsonify
 import queries
 import dbConnection
+import passwordHash
 
 # === Other Class Import Statements ===
 
@@ -20,18 +21,68 @@ app = Flask(__name__)
 
 conn = dbConnection.create_connection()
 
-
 # === Routes ===
 
 # == Post ==
 
-@app.route('/post_test/', methods=["POST"])
+@app.route('/post/register_user/', methods=["POST"])
 def register_user():
     response = request.get_json()
-    json_as_dict = convert_json_to_dict(response)
+    print_response_json(response)
 
-    print(response)
-    return jsonify("Received post test")
+    queries.insertUser(conn, response)
+
+    return jsonify("Received post/register_user")
+
+@app.route('/post/login_user/', methods=["POST"])
+def login_user():
+    response = request.get_json()
+    json_as_dict = convert_json_to_dict(response)
+    print(json_as_dict)
+
+    user_profile = queries.getUserByUsername(conn, response)
+
+    isPasswordValid = passwordHash.verifyPassword(user_profile["password"], json_as_dict["password"])
+    print(isPasswordValid)
+
+    if (isPasswordValid):
+        return jsonify(user_profile["userID"])
+
+@app.route('/post/reply/', methods=["POST"])
+def post_reply():
+    response = request.get_json()
+    print_response_json(response)
+
+    queries.insertReply(conn, response)
+
+    return jsonify("Received post/reply")
+
+@app.route('/post/category/', methods=["POST"])
+def post_category():
+    response = request.get_json()
+    print_response_json(response)
+
+    queries.insertCategory(conn, response)
+
+    return jsonify("Received post/category")
+
+@app.route('/post/board', methods=["POST"])
+def post_board():
+    response = request.get_json()
+    print_response_json(response)
+
+    queries.insertBoard(conn, response)
+
+    return jsonify("Received post/board")
+
+@app.route('/post/thread', methods=["POST"])
+def post_thread():
+    response = request.get_json()
+    print_response_json(response)
+
+    queries.insertThread(conn, response)
+
+    return jsonify("Received post/thread")
 
 
 @app.route('/get/threads/<id>', methods=["POST"])
@@ -100,6 +151,10 @@ def convert_json_to_dict(json_to_convert):
     json_as_str = json.dumps(json_to_convert)
     json_as_dict = json.loads(json_as_str)
     return json_as_dict
+
+def print_response_json(json_to_print):
+    json_as_dict = convert_json_to_dict(json_to_print)
+    print(json_as_dict)
 
 
 # === Main ===
