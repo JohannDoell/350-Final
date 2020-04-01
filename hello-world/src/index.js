@@ -12,7 +12,6 @@ import {
     Route,
     Link
 } from "react-router-dom";
-import { Helmet } from "react-helmet";
 import $ from 'jquery';
 import './index.css';
 
@@ -30,17 +29,6 @@ var userID = -1;
 var username = "";
 
 // ==== Classes ====
-
-class Head extends React.PureComponent {
-  render () {
-    return (
-        <Helmet>
-          <title>1Forum</title>
-          <link rel="shortcut icon" type="image/png" href="D:/Documents/GitHub/350-Final/hello-world/src/images/logo-via-logohub.png" />
-        </Helmet>
-    );
-  }
-}
 
 export default function App() {
   return (
@@ -390,7 +378,6 @@ class Main extends React.Component {
 ReactDOM.render(
 
     <Router>
-        <Head />,
         <App />
     </Router>,
     //<Main />,
