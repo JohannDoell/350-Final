@@ -84,6 +84,18 @@ def post_thread():
     return jsonify("Received post/thread")
 
 
+@app.route('/get/threads/<id>', methods=["POST"])
+def insert_reply(id):
+    response = request.get_json()
+    response["threadID"] = int(id)
+    response = json.dumps(response)
+    print(type(response))
+    print(response)
+    queries.insertReply(conn, response)
+    conn.commit()
+    return "reply post received"
+
+
 # == Get ==
 
 @app.route('/get/categories', methods=["GET"])

@@ -20,7 +20,7 @@ import './index.css';
 // === React Import ===
 
 import {Header, Credits} from './header.js';
-import {HomeContainer, CategoryContainer, ThreadsContainer, Thread, Input } from './containers.js';
+import {HomeContainer, CategoryContainer, ThreadsContainer, Thread, ReplyForm, ToggleReplyForm } from './containers.js';
 
 // === Images ===
 
@@ -120,6 +120,7 @@ class AThread extends React.Component {
     renderThread() {
         return <Thread
         match = {this.props.match}
+
         />
     }
     render() {
@@ -127,6 +128,8 @@ class AThread extends React.Component {
             <div className="generalContainer">
                 {renderHeader()}
                 {this.renderThread()}
+
+                <ToggleReplyForm match={this.props.match}/>
                 <Credits></Credits>
             </div>
         );
@@ -202,7 +205,6 @@ class Main extends React.Component {
                 {this.renderCategories(1)}
                 {this.renderThreadInfo()}
                 {this.renderThread()}
-                <Input></Input>
                 <Credits></Credits>
             </div>
         );

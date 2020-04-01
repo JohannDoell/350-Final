@@ -51,14 +51,13 @@ def getThreadsFromBoardAsJsons(conn, boardID):
     return jsonRows
 
 
-def insertBoard(conn, boardJson):
+def insertBoard(conn, boardDict):
     """
     insert a board into the database
     :param conn: connection to the db
     :param boardJson: the new board data as a json object
     :return: none
     """
-    boardDict = json.loads(boardJson)
     board = (boardDict["boardName"], boardDict["categoryID"])
     sql = '''   INSERT INTO Boards(boardName, categoryID)
                 VALUES(?,?) '''
@@ -115,14 +114,8 @@ def getCategoriesAsJsons(conn):
     return jsonRows
 
 
-def insertReply(conn, replyJson):
-    """
-    insert a new reply into the database
-    :param conn: connection to the database
-    :param replyJson: the new reply data as a json object
-    :return: none
-    """
-    replyDict = json.loads(replyJson)
+def insertReply(conn, replyDict):
+    replyDict = json.loads(replyDict)
     reply = (replyDict["threadID"], replyDict["userID"], replyDict["body"], replyDict["dateCreated"],
              replyDict["dateEdited"])
 
@@ -196,13 +189,13 @@ def getUserAsJson(conn, userID):
     return json.dumps(row)
 
 
-def insertUser(conn, userJson):
+def insertUser(conn, userDict):
     """
     :param conn: connection to database
     :param userJson: json with user info
     :return: none
     """
-    userDict = json.loads(userJson)
+
     userDict["password"] = passwordHash.hashPassword(userDict["password"])
     user = (userDict["username"], userDict["password"])
     cur = conn.cursor()
