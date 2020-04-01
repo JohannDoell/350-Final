@@ -20,9 +20,9 @@ class Header extends React.Component {
     render() {
         return (
             <div className="header">
-            <Banner/>
-            <UserHeaderWindow/>
-            <NavBar/>
+                <Banner />
+                <p>{this.props.givenUsernameMessage}</p>
+                <NavBar />
             </div>
         );
     }
@@ -50,6 +50,16 @@ class NavBar extends React.Component {
                         Members
                     </button>
                 </Link>
+                <Link to={`/login`}>
+                    <button className="navBarButton" onClick={this.props.onClick}>
+                        Login
+                    </button>
+                </Link>
+                <Link to={`/register`}>
+                    <button className="navBarButton" onClick={this.props.onClick}>
+                        Register
+                    </button>
+                </Link>
             </div>
         );
     }
@@ -65,56 +75,9 @@ class Credits extends React.Component {
     }
 }
 
-class UserHeaderWindow extends React.Component {
-    render() {
-        return (
-        <div className="userHeaderWindow">
-        <Login/>
-        </div>
-        );
-    }
-}
 
-class Login extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: '',
-            password: ''
-        };
-
-        this.handleChangeUsername = this.handleChangeUsername.bind(this);
-        this.handleChangePassword = this.handleChangePassword.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    handleChangeUsername(event) {
-        this.setState({username: event.target.value});
-    }
-
-    handleChangePassword(event) {
-        this.setState({password: event.target.value});
-    }
-
-    handleSubmit(event) {
-        // Do a thing
-    }
-
-    render() {
-        return (
-            <div className="login">
-                <p>Login:</p>
-                <label>
-                    <input type="text" value={this.state.username} onChange={this.handleChangeUsername}></input>
-                    <input type="password" value={this.state.password} onChange={this.handleChangePassword}></input>
-                    <input type="submit" value="Submit" onSubmit={this.handleSubmit}/>
-                </label>
-            </div>
-        );
-    }
-}
 
 // === React Export ===
 
 export default Header;
-export {Header, Credits}
+export { Header, Credits }

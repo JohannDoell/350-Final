@@ -148,9 +148,11 @@ def getUserByUsername(conn, userCredentials):
     cur = conn.cursor()
     cur.execute("SELECT * FROM Users WHERE username=?", (userCredentials["username"],))
 
-    row = dict(cur.fetchone())
-
-    return row
+    try:
+        row = dict(cur.fetchone())
+        return row
+    except TypeError:
+        return False
 
 
 def getRepliesFromThreadAsJsons(conn, threadID):
@@ -203,6 +205,7 @@ def insertUser(conn, userDict):
                 VALUES (?,?)'''
 
     cur.execute(sql, user)
+    conn.commit()
 
 
 if __name__ == "__main__":

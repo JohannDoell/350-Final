@@ -21,12 +21,11 @@ app = Flask(__name__)
 
 conn = dbConnection.create_connection()
 
-
 # === Routes ===
 
 # == Post ==
 
-@app.route('/post/register_user', methods=["POST"])
+@app.route('/post/register_user/', methods=["POST"])
 def register_user():
     response = request.get_json()
     print_response_json(response)
@@ -35,7 +34,7 @@ def register_user():
 
     return jsonify("Received post/register_user")
 
-@app.route('/post/login_user', methods=["POST"])
+@app.route('/post/login_user/', methods=["POST"])
 def login_user():
     response = request.get_json()
     json_as_dict = convert_json_to_dict(response)
@@ -44,10 +43,12 @@ def login_user():
     user_profile = queries.getUserByUsername(conn, response)
 
     isPasswordValid = passwordHash.verifyPassword(user_profile["password"], json_as_dict["password"])
+    print(isPasswordValid)
 
-    return jsonify(isPasswordValid)
+    if (isPasswordValid):
+        return jsonify(user_profile["userID"])
 
-@app.route('/post/reply', methods=["POST"])
+@app.route('/post/reply/', methods=["POST"])
 def post_reply():
     response = request.get_json()
     print_response_json(response)
@@ -56,7 +57,7 @@ def post_reply():
 
     return jsonify("Received post/reply")
 
-@app.route('/post/category', methods=["POST"])
+@app.route('/post/category/', methods=["POST"])
 def post_category():
     response = request.get_json()
     print_response_json(response)
