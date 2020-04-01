@@ -168,6 +168,7 @@ def getRepliesFromThreadAsJsons(conn, threadID):
     rows = [dict(row) for row in cur.fetchall()]
 
     for row in rows:
+
         row['username'] = getUserAsDict(conn, row['userID'])["username"]
 
     jsonRows = json.dumps([row for row in rows])
