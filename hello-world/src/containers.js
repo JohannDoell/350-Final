@@ -112,16 +112,16 @@ class BoardContainer extends React.Component {
                     <div className="boardTitle">
                         <p>{this.props.boardTitle}</p>
                     </div>
-                    <div className="boardInfoText">
+                    {/* <div className="boardInfoText">
                         <p>Info Text</p>
-                    </div>
+                    </div> */}
                 </div>
-                <div className="boardStats">
+                {/* <div className="boardStats">
                     <p>Stats</p>
-                </div>
-                <div className="boardLastPost">
+                </div> */}
+                {/* <div className="boardLastPost">
                     <p>Last Post</p>
-                </div>
+                </div> */}
             
             </div>
         );
@@ -193,19 +193,19 @@ class ThreadInfoContainer extends React.Component {
                         <p>{this.props.threadInfoTitle}</p>
                     </div>
 
-                    <div className="threadInfoText">
+                    {/* <div className="threadInfoText">
                         <p>Started by</p>
-                    </div>
+                    </div> */}
 
                 </div>
 
                 <div className="threadStats">
                     <p>Replies: {this.props.numOfReplies}</p>
-                    <p>Views: {this.props.numOfViews}</p>
+                    {/* <p>Views: {this.props.numOfViews}</p> */}
                 </div>
-                <div className="threadLastPost">
+                {/* <div className="threadLastPost">
                     <p>Last Post</p>
-                </div>
+                </div> */}
 
             </div>
         );
@@ -313,7 +313,7 @@ class ToggleReplyForm extends React.Component {
         } else {
             return (
                 <div>
-                <button onClick={this.handleClick}>{this.state.isToggleOn ? 'Close' : 'Reply'}</button>
+                <button className="navBarButton" onClick={this.handleClick}>{this.state.isToggleOn ? 'Close' : 'Reply'}</button>
                 {!this.state.isToggleOn && this.addToggleButton}
     
                 {this.state.isToggleOn && this.addToggleButton && <ReplyForm match={this.props.match} givenUserID={this.props.givenUserID}/>}
@@ -401,7 +401,7 @@ class ReplyForm extends React.Component {
                             value={this.state.value}
                             onChange={this.handleChange} />
 
-                    <button type="submit" value="Submit">Submit</button>
+                    <button className="navBarButton" type="submit" value="Submit">Submit</button>
                 </div>
 
             </form>

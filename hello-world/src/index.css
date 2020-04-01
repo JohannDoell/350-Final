@@ -133,7 +133,7 @@ ol, ul {
 
 .threadGeneralInfo {
   padding-left: 2%;
-  padding-right: 50%;
+  padding-right: 63%;
   text-align: left;
   width: 200px;
   max-width: 200px;
@@ -281,6 +281,10 @@ ol, ul {
 
 .userHeaderWindow {
   padding-bottom: 10px;
+}
+
+.newThreadButton {
+  background-color: aqua;
 }
 
 /* Images */

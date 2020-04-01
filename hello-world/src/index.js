@@ -40,6 +40,7 @@ export default function App() {
           <Route path="/thread/:id" component={AThread} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Registration} />
+          <Route path="/logout" component={Logout} />
           <Route path="/" component={Home} />
         </Switch>
     </Router>
@@ -49,9 +50,34 @@ export default function App() {
 function isValid(text) {
     return text.length >= 0
 }
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
 // render functions
 
 function renderHeader() {
+
+    console.log(getCookie("userID"));
+    if (getCookie("userID") !== "") {
+        userID = getCookie("userID");
+    }
+    username = getCookie("username");
+    
+
     if (userID === -1) {
         return (
             <Header
@@ -105,14 +131,30 @@ class Boards extends React.Component {
 
     render() {
         const { match : {params}} = this.props;
-        return (
-            <div className="generalContainer">
+        if (userID === -1) {
+            return (
+                <div className="generalContainer">
+                    {renderHeader()}
+                    {this.renderThreadInfo()}
+                    <Credits></Credits>
+                </div>
+            );
+        } else {
+            return(
+                <div className="generalContainer">
                 {renderHeader()}
                 {this.renderThreadInfo()}
-                <Link to={`/boards/${params.id}/submit`}>New</Link>
+                <Link to={`/boards/${params.id}/submit`}>
+                    <button className="navBarButton" onClick={this.props.onClick}>
+                        New Thread
+                    </button>
+                </Link>
                 <Credits></Credits>
-            </div>
-        );
+                </div>
+            );
+
+        }
+
     }
 }
 
@@ -195,7 +237,7 @@ class Registration extends React.Component {
                     <label>
                         <input type="text" value={this.state.usernameValue} onChange={this.handleChangeUsername}></input>
                         <input type="password" value={this.state.passwordValue} onChange={this.handleChangePassword}></input>
-                        <input type="submit" value="Submit"/>
+                        <input className="navBarButton" type="submit" value="Submit"/>
                     </label>
                 </form>
                 </div>
@@ -270,6 +312,9 @@ class Login extends React.Component {
                 console.log(data)
                 userID = data;
                 username = this.state.usernameValue;
+                document.cookie = "userID=; username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                document.cookie = "userID=" + userID + "; username=" + username + "; path=/;";
+                console.log(document.cookie);
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -289,7 +334,7 @@ class Login extends React.Component {
                     <label>
                         <input type="text" value={this.state.usernameValue} onChange={this.handleChangeUsername}></input>
                         <input type="password" value={this.state.passwordValue} onChange={this.handleChangePassword}></input>
-                        <input type="submit" value="Submit" />
+                        <input className="navBarButton" type="submit" value="Submit" />
                     </label>
                 </form>
                 </div>
@@ -299,6 +344,26 @@ class Login extends React.Component {
 
 
         );
+    }
+}
+
+class Logout extends React.Component {
+
+    componentDidMount() {
+        // Clear cookie
+        document.cookie = "userID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        userID = -1;
+        username = "";
+        window.location.href = `/`;
+    }
+
+    render() {
+        return(
+            <div className="generalContainer">
+            {renderHeader()}
+            <Credits></Credits>
+            </div>
+        )
     }
 }
 
