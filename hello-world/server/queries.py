@@ -50,7 +50,6 @@ def getThreadsFromBoardAsJsons(conn, boardID):
 
     return jsonRows
 
-
 def insertBoard(conn, boardDict):
     """
     insert a board into the database
