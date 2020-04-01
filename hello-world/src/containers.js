@@ -394,6 +394,89 @@ class ReplyForm extends React.Component {
         );
     }
 }
+
+class ThreadForm extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            boardID: '',
+            isPinned: 0,
+            title: '',
+            replies: 0,
+            views: 0,
+        };
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChange(event) {
+        this.setState({
+            boardID: this.state.boardID,
+            isPinned: 0,
+            title: event.target.value,
+            replies: 0,
+            views: 0,
+        });
+    }
+
+
+async handleSubmit(event){
+    const { match : {params}} = this.props;
+    event.preventDefault();
+    const data = {
+            boardID: this.state.boardID,
+            isPinned: this.state.isPinned,
+            title: this.state.title,
+            replies: this.state.replies,
+            views: this.state.views,
+    };
+
+    await fetch(`http://localhost:5000/get/boards/${params.id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+    })
+    .catch((error) => {
+    console.error('Error:', error);
+    });
+    this.setState({ state: this.state });
+    this.handleRedirect()
+}
+
+    handleRedirect(){
+        const { match : {params}} = this.props;
+        window.location.href = `/boards/${params.id}`;
+    }
+
+    render() {
+        return (
+            <form onSubmit={this.handleSubmit}>
+                <div className="inputContainer">
+                    <p>New Thread!</p>
+
+                        <input
+                            type="text"
+                            className="inputBox"
+                            value={this.state.value}
+                            onChange={this.handleChange}
+                             placeHolder="Title..."/>
+
+                    <button type="submit" value="Submit">Submit</button>
+                </div>
+
+            </form>
+        );
+    }
+}
+
+
+
 // === React Export ===
 
-export {HomeContainer, CategoryContainer, ThreadsContainer, Thread, ReplyForm, ToggleReplyForm}
+export {HomeContainer, CategoryContainer, ThreadsContainer, Thread, ReplyForm, ToggleReplyForm, ThreadForm}
