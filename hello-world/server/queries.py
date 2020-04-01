@@ -163,10 +163,15 @@ def getRepliesFromThreadAsJsons(conn, threadID):
     """
     conn.row_factory = dbConnection.sq.Row
     cur = conn.cursor()
-    cur.execute("SELECT * FROM Replies WHERE threadID=?", (threadID,))
+    sql = """
+            SELECT replyID, Replies.threadID, userID, body, dateCreated, dateEdited, title FROM Replies 
+            JOIN Threads 
+                ON Threads.threadID = Replies.threadID 
+            WHERE Replies .threadID = ?
+            """
+    cur.execute(sql, (threadID,))
 
     rows = [dict(row) for row in cur.fetchall()]
-
     for row in rows:
         row['username'] = getUserAsDict(conn, row['userID'])["username"]
 
