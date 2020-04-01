@@ -4,6 +4,7 @@ import json
 from flask import Flask, request, jsonify
 import queries
 import dbConnection
+import passwordHash
 
 # === Other Class Import Statements ===
 
@@ -33,6 +34,18 @@ def register_user():
     queries.insertUser(conn, response)
 
     return jsonify("Received post/register_user")
+
+@app.route('/post/login_user', methods=["POST"])
+def login_user():
+    response = request.get_json()
+    json_as_dict = convert_json_to_dict(response)
+    print(json_as_dict)
+
+    user_profile = queries.getUserByUsername(conn, response)
+
+    isPasswordValid = passwordHash.verifyPassword(user_profile["password"], json_as_dict["password"])
+
+    return jsonify(isPasswordValid)
 
 @app.route('/post/reply', methods=["POST"])
 def post_reply():
@@ -118,8 +131,8 @@ def convert_json_to_dict(json_to_convert):
     return json_as_dict
 
 def print_response_json(json_to_print):
-    json_as_dict = convert_json_to_dict(response)
-    print(response)
+    json_as_dict = convert_json_to_dict(json_to_print)
+    print(json_as_dict)
 
 
 # === Main ===

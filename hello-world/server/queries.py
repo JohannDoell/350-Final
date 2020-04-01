@@ -116,6 +116,12 @@ def getCategoriesAsJsons(conn):
 
 
 def insertReply(conn, replyJson):
+    """
+    insert a new reply into the database
+    :param conn: connection to the database
+    :param replyJson: the new reply data as a json object
+    :return: none
+    """
     replyDict = json.loads(replyJson)
     reply = (replyDict["threadID"], replyDict["userID"], replyDict["body"], replyDict["dateCreated"],
              replyDict["dateEdited"])
@@ -127,9 +133,27 @@ def insertReply(conn, replyJson):
 
 
 def getUserAsDict(conn, userID):
+    """
+    get a user by their userID
+    :param conn: connection to the database
+    """
     conn.row_factory = dbConnection.sq.Row
     cur = conn.cursor()
     cur.execute("SELECT * FROM Users WHERE userID=?", (userID,))
+
+    row = dict(cur.fetchone())
+
+    return row
+
+def getUserByUsername(conn, userCredentials):
+    """
+    get a user by their username
+    :param conn: connection to the database
+    :param userCredentials: user credentials as a json object
+    """
+    conn.row_factory = dbConnection.sq.Row
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM Users WHERE username=?", (userCredentials["username"],))
 
     row = dict(cur.fetchone())
 
