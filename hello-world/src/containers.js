@@ -252,10 +252,16 @@ class Thread extends React.Component {
     }
 
     render() {
+        let title = ''
+        if (this.state.replies[0] != null){
+            title = this.state.replies[0]['title']
+        } else {
+            title = ''
+        }
         return (
             <div className="threadContainer">
                 <div className="threadTitle">
-                    <p>Thread: {this.props.threadInfoTitle}</p>
+                    <p>Thread: {title}</p>
                 </div>
                 {this.renderReplies()}
             </div>
