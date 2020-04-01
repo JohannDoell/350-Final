@@ -36,7 +36,7 @@ class Head extends React.PureComponent {
     return (
         <Helmet>
           <title>1Forum</title>
-          <link rel="icon" type="image/png" href="D:/Documents/GitHub/350-Final/hello-world/src/images/logo-via-logohub.png" sizes="16x16" />
+          <link rel="shortcut icon" type="image/png" href="D:/Documents/GitHub/350-Final/hello-world/src/images/logo-via-logohub.png" />
         </Helmet>
     );
   }
