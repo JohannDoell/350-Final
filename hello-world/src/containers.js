@@ -427,6 +427,10 @@ class ThreadForm extends React.Component {
 
 async handleSubmit(event){
     const { match : {params}} = this.props;
+    if (!this.state.title.length >= 1){
+        alert("You can't post a thread with an empty title!")
+        return;
+    }
     event.preventDefault();
     const data = {
             boardID: this.state.boardID,
