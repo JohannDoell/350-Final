@@ -64,6 +64,7 @@ ol, ul {
   vertical-align: middle;
   margin: 0px;
   padding: 0px;
+  margin-bottom: 1px;
   padding-left: 10px;
   display: flex;
 }
@@ -128,12 +129,13 @@ ol, ul {
   margin: 0px;
   padding: 0px;
   padding-left: 10px;
+  margin-bottom: 1px;
   display: flex;
 }
 
 .threadGeneralInfo {
   padding-left: 2%;
-  padding-right: 50%;
+  padding-right: 63%;
   text-align: left;
   width: 200px;
   max-width: 200px;
@@ -281,6 +283,10 @@ ol, ul {
 
 .userHeaderWindow {
   padding-bottom: 10px;
+}
+
+.newThreadButton {
+  background-color: aqua;
 }
 
 /* Images */

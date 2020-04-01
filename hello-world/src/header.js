@@ -17,6 +17,11 @@ import bannerImage from './images/banner.png';
 // ==== Classes ====
 
 class Header extends React.Component {
+
+    componentDidMount() {
+        
+    }
+
     render() {
         return (
             <div className="header">
@@ -45,11 +50,6 @@ class NavBar extends React.Component {
                         Home
                     </button>
                 </Link>
-                <Link to={`/members`}>
-                    <button className="navBarButton" onClick={this.props.onClick}>
-                        Members
-                    </button>
-                </Link>
                 <Link to={`/login`}>
                     <button className="navBarButton" onClick={this.props.onClick}>
                         Login
@@ -58,6 +58,11 @@ class NavBar extends React.Component {
                 <Link to={`/register`}>
                     <button className="navBarButton" onClick={this.props.onClick}>
                         Register
+                    </button>
+                </Link>
+                <Link to={`/logout`}>
+                    <button className="navBarButton" onClick={this.props.onClick}>
+                        Logout
                     </button>
                 </Link>
             </div>
