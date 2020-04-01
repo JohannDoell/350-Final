@@ -4,7 +4,6 @@ import React from 'react';
 import $ from 'jquery';
 import './index.css';
 import { Link } from 'react-router-dom';
-
 import blankSquare from './images/blanksquare.png';
 
 // ==== Global Variables ====
@@ -22,8 +21,6 @@ class HomeContainer extends React.Component {
     }
 
     componentDidMount() {
-        console.log("")
-        console.log(this.props)
         //const { match : {params}} = this.props;
         fetch("http://localhost:5000/get/categories")
           .then(response => response.json())
@@ -139,8 +136,6 @@ class ThreadsContainer extends React.Component { //board
         };
     }
     componentDidMount() {
-        console.log("board") // prints
-        console.log(this.props)
         const { match : {params}} = this.props;
         fetch(`http://localhost:5000/get/threads/${params.id}`)
           .then(response => response.json())
@@ -226,8 +221,6 @@ class Thread extends React.Component {
         };
     }
     componentDidMount() {
-        console.log("thread") // prints
-        console.log(this.props)
         const { match : {params}} = this.props;
         fetch(`http://localhost:5000/get/replies/${params.id}`)
           .then(response => response.json())
@@ -288,36 +281,119 @@ class Reply extends React.Component {
     }
 }
 
-class Input extends React.Component {
+// input components
 
+class ToggleReplyForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            value: ''
-        };
+        this.state = {isToggleOn: false};
 
-        this.handleChange = this.handleChange.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
 
-    handleChange(event) {
-        this.setState({value: event.target.value});
+    handleClick() {
+        this.setState(state => ({
+            isToggleOn: !state.isToggleOn
+        }));
+
+    }
+
+    addToggleButton = props => {
+        return
     }
 
     render() {
         return (
             <div>
-                <div className="inputContainer">
-                    <p>Reply</p>
-                    <label>
-                        <textarea className="inputBox" value={this.state.value} onChange={this.handleChange}></textarea>
-                    </label>
-                    <input type="submit" value="Submit"/>
-                </div>
+            <button onClick={this.handleClick}>{this.state.isToggleOn ? 'Close' : 'Reply'}</button>
+            {!this.state.isToggleOn && this.addToggleButton}
+
+            {this.state.isToggleOn && this.addToggleButton && <ReplyForm match={this.props.match}/>}
+
             </div>
         );
     }
 }
 
+class ReplyForm extends React.Component {
+
+    constructor() {
+        super();
+         this.state = {
+            threadID: '',
+            userID: '',
+            body: '',
+            dateCreated: '',
+            dateEdited: '',
+        };
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+
+    handleChange(event) {
+        this.setState({
+        threadID: this.state.threadID,
+        userID: 1,
+        body: event.target.value,
+        dateCreated: "2020-03-31 18:30:41",
+        dateEdited: "2020-03-31 18:30:41",
+        });
+    }
+
+
+   async handleSubmit(event){
+        const { match : {params}} = this.props;
+        event.preventDefault();
+        const data = {
+            threadID: this.state.threadID,
+            userID: this.state.userID,
+            body: this.state.body,
+            dateCreated: this.state.dateCreated,
+            dateEdited: this.state.dateEdited,
+            };
+
+        await fetch(`http://localhost:5000/get/threads/${params.id}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+        this.setState({ state: this.state });
+        this.handleRedirect()
+    }
+
+     handleRedirect(){
+        const { match : {params}} = this.props;
+        window.location.href = `/thread/${params.id}`;
+    }
+
+    render() {
+        return (
+            <form onSubmit={this.handleSubmit}>
+                <div className="inputContainer">
+                    <p>Reply</p>
+
+                        <textarea
+                            className="inputBox"
+                            value={this.state.value}
+                            onChange={this.handleChange} />
+
+                    <button type="submit" value="Submit">Submit</button>
+                </div>
+
+            </form>
+        );
+    }
+}
 // === React Export ===
 
-export {HomeContainer, CategoryContainer, ThreadsContainer, Thread, Input}
+export {HomeContainer, CategoryContainer, ThreadsContainer, Thread, ReplyForm, ToggleReplyForm}
