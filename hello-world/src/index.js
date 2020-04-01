@@ -67,10 +67,14 @@ function getCookie(cname) {
 function renderHeader() {
 
     console.log(getCookie("userID"));
+    console.log(getCookie("username"));
     if (getCookie("userID") !== "") {
         userID = getCookie("userID");
     }
-    username = getCookie("username");
+    if (getCookie("username") !== "") {
+        username = getCookie("username");
+    }
+    
     
 
     if (userID === -1) {
@@ -304,8 +308,10 @@ class Login extends React.Component {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log(data)
+                console.log(data);
+                console.log(document.cookie);
                 userID = data;
+                console.log(this.state.usernameValue);
                 username = this.state.usernameValue;
                 document.cookie = "userID=; username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                 document.cookie = "userID=" + userID + "; username=" + username + "; path=/;";
@@ -346,7 +352,7 @@ class Logout extends React.Component {
 
     componentDidMount() {
         // Clear cookie
-        document.cookie = "userID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "userID=; username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         userID = -1;
         username = "";
         window.location.href = `/`;
