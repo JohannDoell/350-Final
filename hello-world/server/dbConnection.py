@@ -1,13 +1,14 @@
 import sqlite3 as sq
 from sqlite3 import Error
 import os.path
+from pathlib import Path
 
 
 def create_connection():
     """ create a database connection to a SQLite database """
     conn = None
     try:
-        conn = sq.connect(os.path.abspath("../db/forum.db"), check_same_thread=False)
+        conn = sq.connect(str(Path("..", "db", "forum.db")), check_same_thread=False)
         print(sq.version)
     except Error as e:
         print(e)
