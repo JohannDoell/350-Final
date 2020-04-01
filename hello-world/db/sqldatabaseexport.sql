@@ -1,5 +1,5 @@
 --
--- File generated with SQLiteStudio v3.2.1 on Tue Mar 31 15:43:27 2020
+-- File generated with SQLiteStudio v3.2.1 on Tue Mar 31 18:07:35 2020
 --
 -- Text encoding used: System
 --
@@ -12,7 +12,8 @@ DROP TABLE IF EXISTS Boards;
 CREATE TABLE Boards (
     boardID    INTEGER PRIMARY KEY AUTOINCREMENT
                        NOT NULL,
-    boardName  TEXT    NOT NULL,
+    boardName  TEXT    UNIQUE
+                       NOT NULL,
     categoryID INTEGER NOT NULL,
     FOREIGN KEY (
         categoryID
@@ -29,7 +30,8 @@ DROP TABLE IF EXISTS Categories;
 CREATE TABLE Categories (
     categoryID   INTEGER PRIMARY KEY AUTOINCREMENT
                          NOT NULL,
-    categoryName TEXT    NOT NULL
+    categoryName TEXT    UNIQUE
+                         NOT NULL
 );
 
 INSERT INTO Categories (categoryID, categoryName) VALUES (1, 'General');
@@ -82,21 +84,23 @@ INSERT INTO Replies (replyID, threadID, userID, body, dateCreated, dateEdited) V
 DROP TABLE IF EXISTS Threads;
 
 CREATE TABLE Threads (
-    threadID INTEGER PRIMARY KEY AUTOINCREMENT
-                     NOT NULL,
-    boardID  INTEGER NOT NULL,
-    isPinned INTEGER NOT NULL,
-    title    TEXT    NOT NULL,
-    replies  INTEGER NOT NULL,
-    views    INTEGER NOT NULL,
+    threadID    INTEGER PRIMARY KEY AUTOINCREMENT
+                        NOT NULL,
+    boardID     INTEGER NOT NULL,
+    isPinned    INTEGER NOT NULL,
+    title       TEXT    UNIQUE
+                        NOT NULL,
+    replies     INTEGER NOT NULL,
+    views       INTEGER NOT NULL,
+    lastReplyID INTEGER,
     FOREIGN KEY (
         boardID
     )
     REFERENCES Boards (boardID) 
 );
 
-INSERT INTO Threads (threadID, boardID, isPinned, title, replies, views) VALUES (1, 1, 0, 'The almighty SPAM TOPIC!', 12955, 1582747);
-INSERT INTO Threads (threadID, boardID, isPinned, title, replies, views) VALUES (4, 2, 0, 'Hello every one', 2, 1810);
+INSERT INTO Threads (threadID, boardID, isPinned, title, replies, views, lastReplyID) VALUES (1, 1, 0, 'The almighty SPAM TOPIC!', 12955, 1582747, NULL);
+INSERT INTO Threads (threadID, boardID, isPinned, title, replies, views, lastReplyID) VALUES (4, 2, 0, 'Hello every one', 2, 1810, NULL);
 
 -- Table: Users
 DROP TABLE IF EXISTS Users;
@@ -104,7 +108,8 @@ DROP TABLE IF EXISTS Users;
 CREATE TABLE Users (
     userID   INTEGER PRIMARY KEY AUTOINCREMENT
                      NOT NULL,
-    username TEXT    NOT NULL,
+    username TEXT    UNIQUE
+                     NOT NULL,
     password TEXT    NOT NULL
 );
 
@@ -116,6 +121,78 @@ INSERT INTO Users (userID, username, password) VALUES (5, 'AkioKlaus', '12345');
 INSERT INTO Users (userID, username, password) VALUES (6, 'pontrumlee', '12345');
 INSERT INTO Users (userID, username, password) VALUES (7, 'Arraxis', '12345');
 INSERT INTO Users (userID, username, password) VALUES (8, '[Astral|Zephyr]', '12345');
+
+-- Trigger: updateLastPostDelete
+DROP TRIGGER IF EXISTS updateLastPostDelete;
+CREATE TRIGGER updateLastPostDelete
+         AFTER DELETE
+            ON Replies
+BEGIN
+    UPDATE Threads
+       SET lastReplyID = (
+               SELECT replyID
+                 FROM Replies
+                WHERE dateCreated IN (
+                          SELECT MAX(dateCreated) 
+                            FROM Replies
+                           WHERE threadID = OLD.threadID
+                      )
+           )
+     WHERE threadID = OLD.threadID;
+END;
+
+
+-- Trigger: updateLastPostInsert
+DROP TRIGGER IF EXISTS updateLastPostInsert;
+CREATE TRIGGER updateLastPostInsert
+         AFTER INSERT
+            ON Replies
+BEGIN
+    UPDATE Threads
+       SET lastReplyID = (
+               SELECT replyID
+                 FROM Replies
+                WHERE dateCreated IN (
+                          SELECT MAX(dateCreated) 
+                            FROM Replies
+                           WHERE threadID = NEW.threadID
+                      )
+           )
+     WHERE threadID = NEW.threadID;
+END;
+
+
+-- Trigger: updateReplyCountDelete
+DROP TRIGGER IF EXISTS updateReplyCountDelete;
+CREATE TRIGGER updateReplyCountDelete
+         AFTER DELETE
+            ON Replies
+BEGIN
+    UPDATE Threads
+       SET replies = (
+               SELECT COUNT( * ) 
+                 FROM Replies
+                WHERE threadID = OLD.threadID
+           )
+     WHERE threadID = OLD.threadID;
+END;
+
+
+-- Trigger: updateReplyCountInsert
+DROP TRIGGER IF EXISTS updateReplyCountInsert;
+CREATE TRIGGER updateReplyCountInsert
+         AFTER INSERT
+            ON Replies
+BEGIN
+    UPDATE Threads
+       SET replies = (
+               SELECT COUNT( * ) 
+                 FROM Replies
+                WHERE threadID = NEW.threadID
+           )
+     WHERE threadID = NEW.threadID;
+END;
+
 
 COMMIT TRANSACTION;
 PRAGMA foreign_keys = on;

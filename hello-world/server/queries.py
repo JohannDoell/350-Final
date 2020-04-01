@@ -18,6 +18,20 @@ def insertThread(conn, threadJson):
     cur = conn.cursor()
     cur.execute(sql, thread)
 
+def updateThreadViews(conn, threadJson):
+    """
+    insert a thread into the database
+    :param conn: connection to the db
+    :param threadJson: the new thread data as a json object
+    :return: none
+    """
+    threadDict = json.loads(threadJson)
+    thread = (threadDict["threadID"])
+    sql = '''   UPDATE Threads
+                SET views = views + 1
+                WHERE ?'''
+    cur = conn.cursor()
+    cur.execute(sql, thread)
 
 def getThreadsFromBoardAsJsons(conn, boardID):
     """
