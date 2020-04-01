@@ -30,7 +30,6 @@ var username = "";
 
 // ==== Classes ====
 
-
 export default function App() {
   return (
     <Router>
@@ -45,10 +44,6 @@ export default function App() {
         </Switch>
     </Router>
   );
-}
-
-function isValid(text) {
-    return text.length >= 0
 }
 
 function getCookie(cname) {
@@ -67,8 +62,8 @@ function getCookie(cname) {
     return "";
   }
 
-// render functions
 
+// render functions
 function renderHeader() {
 
     console.log(getCookie("userID"));
@@ -445,6 +440,7 @@ class Main extends React.Component {
 // ========================================
 
 ReactDOM.render(
+
     <Router>
         <App />
     </Router>,
